@@ -31,7 +31,7 @@ exports.createNote = async(req,res)=>{
         const {title,recognizedText,strokeImagePath,} = req.body;
         if(!title){
             return res.status(400).json({
-                message:"can't be empty, data are rvequired"
+                message:"Title is required"
             })
         }
         const newNote = new Note({title,recognizedText,strokeImagePath,userId:userId});       
@@ -39,7 +39,7 @@ exports.createNote = async(req,res)=>{
         if(response){
             res.status(201).json({
                 message:"Note created successfully",
-                data:response
+                data:response,
             })
         }
 
@@ -54,6 +54,7 @@ exports.createNote = async(req,res)=>{
 // controller to update user details
 exports.updateNote = async(req,res)=>{
     try {
+        const userId = req.user.userId;
         const NoteId = req.params.id;
         const updates = {};
         //Dynamic updates
@@ -90,15 +91,16 @@ exports.updateNote = async(req,res)=>{
 // controller to delete a note
 exports .deleteNote = async(req,res)=>{
     try {
-        const NoteId =req.params.id;
-        if(await Note.findById(NoteId)){
-            const response =await Note.findByIdAndDelete(NoteId);
+        const userId = req.user.userId;
+        const noteId =req.params.id;
+        
+        const response =await Note.findByIdAndDelete(noteId);
+        if(response){
             res.status(200).json({
                 message:"Note deleted successfully",
                 data:response
             })
-        } 
-        else{
+        }else{
             res.status(404).json({
                 message:"Note not found, Invalid NoteID"
             })
