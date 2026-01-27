@@ -1,11 +1,14 @@
 import React from 'react';
-
+import Signin from './pages/signin';
+import './App.css'
+import Signup from './pages/signup';
 
 function App (){
   return(
     <>
     <div className='hello-world'>
-      <h1>The first UI/UX of the Air wirte system</h1>
+     
+      <Signup/>
     </div>
     
     </>
