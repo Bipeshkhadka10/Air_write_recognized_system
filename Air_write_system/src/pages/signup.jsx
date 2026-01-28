@@ -4,6 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import {FiUser,FiMail,FiLock,FiUnlock} from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 
 function Signup(){
@@ -17,7 +18,7 @@ function Signup(){
 
         <div id="logo-content">
             <div id="logo">
-                <img src="../public/logo.jpg" alt="logo" title="Air_write_system" />
+                <Link to='/'><img src="../public/logo.jpg" alt="logo" title="Air_write_system" /></Link>
             </div>
             <div id="logo-discp">
                 <h2>Create Account</h2>
@@ -72,7 +73,7 @@ function Signup(){
             <button className="continue-btn social-btn"><FcGoogle className="icon" /> Google</button>
             <button className="continue-btn social-btn"><FaGithub className="icon" /> GitHub</button>
         </div>
-        <p className="text">Already have an account? <span className="links">Sign in</span></p>
+        <p className="text">Already have an account? <span className="links"><Link to='/signin'>Sign In</Link></span></p>
         </form>
        
         </div>

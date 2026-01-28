@@ -1,16 +1,13 @@
 import React from 'react';
-import Signin from './pages/signin';
 import './App.css'
-import Signup from './pages/signup';
-
+import Header from './components/header';
+import { Outlet } from 'react-router-dom';
+import Features from './pages/features';
 function App (){
   return(
     <>
-    <div className='hello-world'>
-     
-      <Signup/>
-    </div>
-    
+    <Header />
+    <Outlet />
     </>
   )
 }

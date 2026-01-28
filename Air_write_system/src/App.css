@@ -2,6 +2,7 @@
   margin: 0 ;
   padding: 0;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -214,4 +215,382 @@ form{
 }
 .toggle-eye:hover{
   color:#4a6cf7;
+}
+
+
+@media (max-width: 768px) {
+  .login-container{
+    width: 100%;
+  }
+  .login-content{
+    max-width:90% ;
+  }
+}
+
+/* styling header */
+.header{
+  width: 100%;
+  display: flex;
+  background-color: #ffff;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  height: 12vh;
+  box-shadow: 1px .5px 3px gray ;
+}
+
+.header li{
+  list-style: none;
+  font-family: sans-serif;
+  font-weight: 500;
+  padding: 3px;
+  transition: text-decoration .4s ease .3s;  
+}
+.header li:hover{
+ 
+  text-decoration: underline;
+}
+
+.header ul{
+  display: flex;
+  gap: 15px;
+
+}
+
+a{
+  text-decoration: none;
+  font-family: sans-serif;
+  font-weight: 600;
+  font-size: small;
+}
+
+.register-left, .register-right{
+  margin: 2px;
+  padding:6px 8px;
+  height: 2.1rem;
+  background-color: #ffff;
+  border-radius: 5px; 
+  transition: all .3s ease;
+  
+}
+.register-right{
+  color: #fff;
+  margin:0 10px;
+  background-color: #4a6cf7;
+  
+}
+.register-right:hover{
+  transform: scale(1.2);
+  box-shadow:3px 3px 10px rgb(85, 153, 220) ;
+}
+.register-left:hover{
+  background-color: #4a6cf7;
+}
+
+
+@media (max-width:768px) {
+  .header ul{
+    display: none;
+  }
+}
+
+
+/* landing page styling */
+.container{
+  margin-top: 7px;
+  display: flex;
+  justify-content: space-between;
+  height: calc(100vh - 12vh);
+  
+}
+
+.content-left{
+  text-align: left;
+  width: 50%;
+  background-color: none;
+  padding: 20px;
+  padding-left: 30px;
+  position: relative;
+}
+.content-left .content-warp h1{
+  font-size: 4rem;
+}
+.content-left-text p{
+  font-family: sans-serif;
+  width: 90%;
+  color:#666;
+}
+.content-left-btn{
+  align-items: center;
+  width: 100%;
+  position: absolute;
+  margin: 20px 0px;
+  display: flex;
+  gap: 20px;
+}
+
+.content-left-btn .btns{
+  height: 2.7em;
+  width: 14vw;
+  border: 1px solid #4a6cf7;
+  border-radius: 7px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.primary{
+  background: #4a6cf7;
+  
+
+}
+.primary:hover{
+  transform: scale(1.05);
+  box-shadow: 3px 3px 20px #4a6cf7;
+}
+.secondary:hover{
+  background: #757373b6;
+  opacity: 1;
+}
+
+.content-left-efficiency{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    box-sizing: content-box;
+    position: absolute;
+    bottom: 10px;
+    float: left;
+  
+}
+
+.warp-eff{
+  width: 15vw;
+  text-align: center;
+  justify-self:baseline;
+}
+.warp-eff span{
+  font-size: xx-large;
+  font-family: sans-serif;
+  font-weight: 700;color: #4a6cf7;
+}
+.warp-eff p{
+  font-family: sans-serif ;
+  margin: 0;
+}
+
+.content-right{
+  width: calc(100% - 50% - 14px);
+  align-items: center;
+ 
+  border-radius: 20px;
+  height: auto;
+  background-image: url('../public/right.webp');
+  background-size:cover;
+  
+  
+}
+
+/* features styling css */
+
+.content-wapper{
+  height: 100%;
+  padding:7vh 0px ;
+  text-align: center;
+  background-color:whitesmoke;
+}
+
+.content-wapper .content-title{
+  width: 100%;
+  padding: 20px;
+  margin: 50px 0px;
+  
+}
+
+.content-title h1, p{
+  font-family: sans-serif;
+}
+.title-edt{
+  color: #4a6cf7;
+}
+.content-title p{
+  font-weight:550;
+  color: #666;
+}
+
+.card-warpper{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.card-content{
+  text-align: left; 
+  width: 25vw;
+  display: flex;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: all .3s ease;
+}
+
+.card-content:hover{
+  transform: translatey(5px);
+  box-shadow: 2px 2px 10px #666 ;
+}
+
+
+.card-title{
+  font-family: sans-serif;
+  font-size: large;
+}
+.card-text{
+  font-family: sans-serif;
+  font-size: small;
+  color: #666;
+}
+
+/* working styling css */
+.card2-warpper {
+  padding: 30px 10px;
+  display: flex;
+  justify-content: center;
+}
+.card2-content {
+  padding: 0vw;
+  display: inline-flex;
+  gap: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+.card2-content::before {
+  content: "";
+  position: absolute;
+  top: 130px;              
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, #4C6FFF, #6A5ACD);
+  z-index: 0;
+}
+.card2 {
+  width: 15vw;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px 25px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border: 1px solid #eef0f6;
+  z-index: 10;
+}
+
+.card2:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(76, 111, 255, 0.15);
+}
+.card-line::after{
+ content:"";
+  flex:1;
+  height:1px;
+  background:#666;
+}
+
+.icon-box {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 16px auto;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4C6FFF, #6A5ACD);
+  color: white;
+  box-shadow: 0 8px 20px rgba(76, 111, 255, 0.25);
+  font-size: 24px;
+}
+.card2 span {
+  display: inline-block;
+  font-size: small;
+  font-family: sans-serif;
+  color: #6A5ACD;
+  margin-bottom: 8px;
+  text-transform:capitalize;
+  letter-spacing: 1px;
+}
+.card2-title {
+  font-size: 20px;
+  font-family: sans-serif;
+  font-weight: 700;
+  color: #1B1F3B;
+  margin-bottom: 10px;
+}
+.card2-text {
+  font-family: sans-serif;
+  color: #6b7280;
+  font-size: 14px;
+  
+}
+@media (max-width: 768px) {
+  .card2 {
+    padding: 20px 15px;
+  }
+
+  .card2-title {
+    font-size: 18px;
+  }
+  .icon-box{
+    height: 30px;
+    width: 30px;
+  }
+}
+
+/* documentation styling css */
+
+.application-card{
+  width: 40vw;
+  border-radius: 15px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+}
+
+.application-card:hover {
+  transform: translateY(-5px);
+}
+.card-image{
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+}
+.icon-disc{
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
+.card-image img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.application-card:hover .card-image img{
+  transform: scale(1.1);
+}
+.card-disc{
+  padding:0px 10px;
+  text-align: left;
+}
+
+.edu{
+  font-family: sans-serif;
+  font-size: 16px;
+}
+.card-disc p{
+  color: #6b7280;
+  line-height: 1.5;
 }

@@ -3,7 +3,7 @@ import { useState,useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { FiLock, FiUnlock } from "react-icons/fi";
-
+import { Link } from "react-router-dom";
 
 function Signin(){
 
@@ -15,7 +15,7 @@ function Signin(){
 
         <div id="logo-content">
             <div id="logo">
-                <img src="../public/logo.jpg" alt="logo" title="Air_write_system" />
+                <Link to='/'><img src="../public/logo.jpg" alt="logo" title="Air_write_system" /></Link>
             </div>
             <div id="logo-discp">
                 <h2>Welcome Back</h2>
@@ -42,7 +42,7 @@ function Signin(){
                 <input type="checkbox" id="remember-password" />
                 <label htmlFor="remember-password">Remember me</label>
             </div>
-            <p><span className="links">Forgot password?</span></p>
+            <p><span className="links"><Link to='/forgot-password'>Forgot password?</Link></span></p>
         </div>
 
         <button type="submit" id="signin-btn">Sign In</button>
@@ -55,7 +55,7 @@ function Signin(){
             <button className="continue-btn social-btn"><FcGoogle className="icon" /> Google</button>
             <button className="continue-btn social-btn"><FaGithub className="icon" /> GitHub</button>
         </div>
-        <p className="text">Don't have an account? <span className="links">Sign up</span></p>
+        <p className="text">Don't have an account? <span className="links"><Link to='/signup' >signup</Link></span></p>
         </form>
        
         </div>
