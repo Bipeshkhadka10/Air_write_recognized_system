@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 
 function Header() {
+    const navigate = useNavigate();
   return (
     <nav>
        <div className="header">
-            <div className="logo">
+            <div className="logo" onClick={()=>{navigate('/')}} style={{cursor:"pointer"}}>
                 <h1>AirWrite</h1>
             </div>
             <ul>

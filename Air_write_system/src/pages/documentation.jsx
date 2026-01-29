@@ -17,7 +17,7 @@ export default function Documentation() {
           <div className="card-warpper">
             <div className="application-card">
               <div className="card-image">
-                <img src="/public/edu.webp" alt="education-picture" />
+                <img src="/edu.webp" alt="education-picture" />
                 <div className="icon-disc">
                   <FaGraduationCap size={28} color="#4C6FFF" />
                 </div>
@@ -30,7 +30,7 @@ export default function Documentation() {
             </div> 
             <div className="application-card">
               <div className="card-image">
-                <img src="/public/pre.webp" alt="presentation-picture" />
+                <img src="/pre.webp" alt="presentation-picture" />
                 <div className="icon-disc">
                   <FaChalkboardTeacher size={28} color="#4C6FFF" />
                 </div>
@@ -42,7 +42,7 @@ export default function Documentation() {
             </div>   
              <div className="application-card">
               <div className="card-image">
-                <img src="/public/acc.webp" alt="Accessiblity-picture" />
+                <img src="/acc.webp" alt="Accessiblity-picture" />
                 <div className="icon-disc">
                   <MdAccessibilityNew size={28} color="#4C6FFF" />
                 </div>
@@ -54,7 +54,7 @@ export default function Documentation() {
             </div>
              <div className="application-card">
               <div className="card-image">
-                <img src="/public/coll.webp" alt="collaboration-picture" />
+                <img src="/coll.webp" alt="collaboration-picture" />
                 <div className="icon-disc">
                   <FaUsers size={28} color="#4C6FFF" />
                 </div>
