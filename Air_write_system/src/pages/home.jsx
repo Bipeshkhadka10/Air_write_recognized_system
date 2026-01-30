@@ -22,7 +22,7 @@ function Home(){
                 </div>
                 <div className="content-left-btn">
                     <button className="btns primary" onClick={()=>{Navigate('/Signup')}}>Get Started Free</button>
-                    <button className="btns secondary"><FiPlay style={{paddingRight:'2px'}} /> PlayTry Demo</button>
+                    <button className="btns secondary" onClick={()=>{Navigate('/dashboard')}}><FiPlay style={{paddingRight:'2px'}} /> PlayTry Demo</button>
                 </div>
                 <div className="content-left-efficiency">
                     <div className="warp-eff">

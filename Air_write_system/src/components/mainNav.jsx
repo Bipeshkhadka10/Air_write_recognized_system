@@ -7,6 +7,7 @@ import Features from '../pages/features';
 import About from '../pages/about';
 import Documentation from '../pages/documentation';
 import ForgetPassword from '../pages/forgetPassword';
+import UserDashbord from '../pages/userDashbord';
     const router = createBrowserRouter([
         {
             path:'/',
@@ -19,6 +20,13 @@ import ForgetPassword from '../pages/forgetPassword';
                 {path:'/signin', element:<Signin/>},
                 {path:'/signup', element:<Signup/>},
                 {path:'/forgot-password', element:<ForgetPassword/>},
+            ]
+        },
+        {
+            path:'/dashboard',
+            element:<UserDashbord />,
+            children:[
+              {index:true ,element:<UserDashbord/> }
             ]
         }
     ])
