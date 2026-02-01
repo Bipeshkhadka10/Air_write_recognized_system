@@ -4,9 +4,10 @@ import {SlidebarItems} from '../components/slideBar'
 import '../assets/style.css'
 import { LayoutDashboardIcon, SquarePen, PenTool,FileText,Activity, Settings2, Sidebar } from 'lucide-react'
 import { useState } from 'react'
+import Dashboard from '../components/dashboard'
 
 export default function UserDashbord() {
-    
+    const [activeIndex, setActiveIndex] = useState(0)
     const items= [
         {icon:<LayoutDashboardIcon/> , text:'Dashboard' },
         {icon:<PenTool/> , text:'Live Writing' },
@@ -19,15 +20,18 @@ export default function UserDashbord() {
     <main>
         <Slidebar >
             {items.map((item,index)=>{
-                console.log(item),
+                return(
                 <SlidebarItems
                 key={index}
                 icon={item.icon}
                 text={item.text}
-                alert
+                active = {activeIndex === index}
+                clicked = {()=>{setActiveIndex(index)}}
                 />
+                )
             })}          
         </Slidebar>
+       
     </main>
   )
 }
