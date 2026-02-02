@@ -31,7 +31,7 @@ export default function Slidebar({ children }) {
 
           {/* Footer */}
           <div className='p-3 border-t'>
-            <div className={`flex w-full px-2 ${expand ? 'gap-3' : 'justify-center'}`}>
+            <div className={`flex w-full ${expand ? 'gap-3' : 'justify-center'}`}>
               <img src="/right.webp" alt="" className='rounded-md h-10 w-10' />
               {expand && (
                 <div className='leading-4'>
