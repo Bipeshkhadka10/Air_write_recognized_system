@@ -1,13 +1,15 @@
 import React from 'react';
-
-
+import './App.css'
+import Header from './components/header';
+import { Outlet } from 'react-router-dom';
+import Features from './pages/features';
+import Footer from'./components/footer';
 function App (){
   return(
     <>
-    <div className='hello-world'>
-      <h1>The first UI/UX of the Air wirte system</h1>
-    </div>
-    
+    <Header />
+    <Outlet />
+    <Footer/>
     </>
   )
 }
