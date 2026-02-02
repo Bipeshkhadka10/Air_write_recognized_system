@@ -3,12 +3,22 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import logo from '../assets/logo1.webp'
 import { FiLogOut } from 'react-icons/fi'
 import { ChevronLeft, ChevronRight } from "lucide-react"
-
+import api from '../api/axios.js';
 const sidebarContext = createContext();
+
+
 
 export default function Slidebar({ children }) {
   const [expand, setExpand] = useState(true);
 
+  const handleLogout = async() => {
+    // Clear user session or authentication tokens here
+    const response = await api.post('/user/logout')
+    if(response?.status === 200){
+      console.log('logout successfully');
+      window.location.href = '/';
+    }
+  }
   return (
     <div className='flex h-full w-full'>
       <aside className={`h-screen transition-all duration-300 ${expand ? 'w-64' : 'w-16'}`}>
@@ -41,7 +51,7 @@ export default function Slidebar({ children }) {
               )}
             </div>
 
-            <div className='flex justify-center gap-2 items-center h-10 bg-indigo-600 text-white rounded mt-3 cursor-pointer'>
+            <div onClick={handleLogout} className='flex justify-center gap-2 items-center h-10 bg-indigo-600 text-white rounded mt-3 cursor-pointer'>
               <FiLogOut size={18} />
               {expand && <button className='font-semibold text-sm'>Signout</button>}
             </div>

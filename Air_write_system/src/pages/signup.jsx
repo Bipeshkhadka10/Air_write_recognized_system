@@ -125,24 +125,28 @@ function Signup(){
               <label htmlFor="name">Full Name</label>
               <input type="text" name="name" id="name" placeholder="enter your name"  required autoFocus/>
               <FiUser className="icons"/>
+              {data?.error?.name && <p className="form-error">{data?.error?.name}</p>}
               <br />
             </div>
             <div className="email-field">
               <label htmlFor="email">Email</label>
               <input type="email" name="email" id="email" placeholder="name@example.com"  required />
               <FiMail className="icons"/>
+              {data?.error?.email && <p className="form-error">{data?.error?.email}</p>}
               <br />
             </div>
             <label htmlFor="password">Password</label>
             <div className="password-field">
                 <input type={showPassword ? "text" : "password"} name="password" id="password" placeholder="enter your password"  required/>
                 <span className="toggle-eye" onClick={()=>{setShowPassword(!showPassword)}}>{ showPassword ? <FiUnlock/> :<FiLock/> }</span>
+                {data?.error?.password && <p className="form-error">{data?.error?.password}</p>}
             </div>
             <br />
             <label htmlFor="confirm-password">Confirm Password</label>
             <div className="password-field">
                 <input type={showConfirmPassword ? "text" : "password"} name="confirm-password" id="confirm-password" placeholder="confirm your password"  required/>
                 <span className="toggle-eye" onClick={()=>{setShowConfirmPassword(!showConfirmPassword)}}>{ showConfirmPassword ? <FiUnlock/> :<FiLock/> }</span>
+                {data?.error?.confirmPassword && <p className="form-error" > {data?.error?.confirmPassword}</p>}
             </div>
         </div>
          
@@ -154,7 +158,7 @@ function Signup(){
             
         </div>
 
-        <button type="submit" disabled={isPending} id="signin-btn">{isPending ? "Creating Account":"Create Account"}</button>
+        <button type="submit" disabled={isPending} id="signin-btn" style={isPending ? {opacity:0.5, cursor:"not-allowed"} : {}} >{isPending ? "Creating Account":"Create Account"}</button>
 
         <br />
         <p id="continue-line"><span>or continue with</span></p>

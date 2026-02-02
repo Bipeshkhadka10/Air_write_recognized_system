@@ -186,7 +186,7 @@ exports.loginUser =async(req,res)=>{
                 const isPasswordMatch = await user.comparePasswords(password);
                 if(!isPasswordMatch || !user){
                     return res.status(401).json({
-                        message:"invalid email or password"
+                        message:"invalid password"
                     })
                 }
 

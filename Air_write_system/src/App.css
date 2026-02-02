@@ -701,3 +701,11 @@ a{
   font-size: 12px;
   color:#484849 ;
 }
+
+.form-error{
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0px;
+  padding: 2px;
+  text-align: left;
+}

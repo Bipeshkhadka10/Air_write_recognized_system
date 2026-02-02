@@ -1,13 +1,88 @@
-import React from "react";
+import React, { useActionState } from "react";
 import { useState,useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { FiLock, FiUnlock } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from '../api/axios.js'
+
+    // form submission handler 
+    async function handleFormSubmit(prev, formData){
+        const email = formData.get('email');
+        const password = formData.get('password');
+        const error = {};
+        // regex for validating email and password
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordRegex =/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/
+
+        // email validation
+        if(!email){
+            error.email = "Email is requried";
+        }else if(!emailRegex.test(email)){
+            email.error = "Invalid email formate";
+        }
+
+        // password validation
+        if(!password){
+            error.password ="Password is required";
+        }else if(!passwordRegex.test(password)){
+            error.password = "Password must contain at least one uppercase letter, lowercase letter, number, and special character";
+        }
+
+        //  checking for any error
+        if(Object.keys(error).length > 0){
+            return{
+                success:false,
+                error:error
+            }
+        }
+
+        // sending data toserver
+
+        try {
+            const response = await api.post('/user/login',{email,password});
+            if(response.status === 200){
+                return{
+                    success:true,
+                    message:"successfully signed in"
+                }
+            }
+        } catch (error) {
+            if(error.response && error.response.status === 404){
+                console.log(error.response)
+                return{
+                    success:false,
+                    error:{email:"User not found. Please check your email or sign up."}
+                }
+            }
+            else if(error.response.status === 401){
+                return{
+                    success:false,
+                    error:{password:"Invalid password. Please try again."}
+                }
+            }
+
+        }
+         
+    }
 
 function Signin(){
-
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [data,formAction,isPending] = useActionState(handleFormSubmit,{
+        success:false,
+        error:{}
+    })
+
+
+    useEffect(()=>{
+        if(data?.success){
+            navigate('/dashboard');
+            console.log('sigined in successfully');
+        }else{
+            navigate('/signin');
+        }
+    },[data])
 
     return(
         <div className="login-container">
@@ -24,16 +99,18 @@ function Signin(){
         </div>
 
         {/* form for user to signin  */}
-        <form action="/submit" method="post">
+        <form action={formAction} method="post">
         
         <div className="form-content">
             <label htmlFor="email">Email</label>
             <input type="email" name="email" id="email" placeholder="name@example.com"  required autoFocus/>
+            {data?.error?.email && <p className="form-error">{data?.error?.email}</p>}
             <br />
             <label htmlFor="password">password</label>
             <div className="password-field">
                 <input type={showPassword ? "text" : "password"} name="password" id="password" placeholder="enter your password"  required/>
                 <span className="toggle-eye" onClick={()=>{setShowPassword(!showPassword)}}>{ showPassword ? <FiUnlock/> :<FiLock/> }</span>
+                {data?.error?.password && <p className="form-error">{data?.error?.password}</p>}
              </div>
         </div>
          
@@ -45,7 +122,7 @@ function Signin(){
             <p><span className="links"><Link to='/forgot-password'>Forgot password?</Link></span></p>
         </div>
 
-        <button type="submit" id="signin-btn">Sign In</button>
+        <button type="submit" id="signin-btn" disabled={isPending} style={isPending ? {opacity:0.5, cursor:"not-allowed"} : {}}>{isPending?"signing in...":"Sign In"}</button>
 
         <br />
         <p id="continue-line"><span>or continue with</span></p>
