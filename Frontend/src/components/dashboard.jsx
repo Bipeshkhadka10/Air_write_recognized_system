@@ -23,6 +23,7 @@ export default function Dashboard({expand}) {
       </nav>
     
 
+
       {/* status containers */}
       <div className='w-full flex justify-around items-center px-2'>
         <div className='flex items-center p-1.5'>
