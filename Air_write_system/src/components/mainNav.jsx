@@ -8,25 +8,34 @@ import About from '../pages/about';
 import Documentation from '../pages/documentation';
 import ForgetPassword from '../pages/forgetPassword';
 import UserDashbord from '../pages/userDashbord';
+import Notes from './notes';
+import Dashboard from './dashboard';
+import LiveWriting from './liveWriting';
+import ModelStatus from './modelStatus';
+import Settings from './settings';
     const router = createBrowserRouter([
         {
             path:'/',
             element:<App />,
             children:[
                 {index:true, element:<Home/> },
-                {path:'/features', element:<Features/>},
-                {path:'/about', element:<About/>},
-                {path:'/documentation', element:<Documentation/>},
-                {path:'/signin', element:<Signin/>},
-                {path:'/signup', element:<Signup/>},
-                {path:'/forgot-password', element:<ForgetPassword/>},
+                {path:'features', element:<Features/>},
+                {path:'about', element:<About/>},
+                {path:'documentation', element:<Documentation/>},
+                {path:'signin', element:<Signin/>},
+                {path:'signup', element:<Signup/>},
+                {path:'forgot-password', element:<ForgetPassword/>},
             ]
         },
         {
             path:'/dashboard',
             element:<UserDashbord />,
             children:[
-              {index:true ,element:<UserDashbord/> }
+              {index:true ,element:<Dashboard/> },
+              {path:'livewriting', element:<LiveWriting/> },
+              {path:'notes', element:<Notes/> },
+              {path:'modelstatus', element:<ModelStatus/> },
+              {path:'settings', element:<Settings/> },
             ]
         }
     ])

@@ -5,6 +5,7 @@ import '../assets/style.css'
 import { LayoutDashboardIcon, SquarePen, PenTool,FileText,Activity, Settings2, Sidebar } from 'lucide-react'
 import { useState } from 'react'
 import Dashboard from '../components/dashboard'
+import { Outlet } from 'react-router-dom'
 
 export default function UserDashbord() {
     const [activeIndex, setActiveIndex] = useState(0)
@@ -31,7 +32,6 @@ export default function UserDashbord() {
                 )
             })}          
         </Slidebar>
-       
     </main>
   )
 }
