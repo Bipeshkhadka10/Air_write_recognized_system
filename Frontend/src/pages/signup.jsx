@@ -107,13 +107,13 @@ function Signup(){
         <div className="login-container">
         <div className="login-content">
 
-        <div id="logo-content">
-            <div id="logo">
-                <Link to='/'><img src="../public/logo.jpg" alt="logo" title="Air_write_system" /></Link>
+       <div id="logo-content flex flex-col justify-center items-center">
+            <div className="logo mt-4 p-3 flex justify-center items-center">
+                <Link to='/'><img src="../public/logo.jpg" alt="logo" title="Air_write_system" className="h-20 rounded-xl" /></Link>
             </div>
-            <div id="logo-discp">
-                <h2 className="font-bold">Create Account</h2>
-                <p className="text">Start writing in the air today.</p>
+            <div id="logo-discp flex">
+                <h2 className="font-bold text-4xl">Create Account</h2>
+                <p className="text-sm text-gray-500">Start writing in the air today.</p>
             </div>
         </div>
 
@@ -124,14 +124,14 @@ function Signup(){
             <div className="name-field">
               <label htmlFor="name">Full Name</label>
               <input type="text" name="name" id="name" placeholder="enter your name"  required autoFocus/>
-              <FiUser className="icons"/>
+              <FiUser className="icons position-absolute top-10"/>
               {data?.error?.name && <p className="form-error">{data?.error?.name}</p>}
               <br />
             </div>
             <div className="email-field">
               <label htmlFor="email">Email</label>
               <input type="email" name="email" id="email" placeholder="name@example.com"  required />
-              <FiMail className="icons"/>
+              <FiMail className="icons position-absolute top-10"/>
               {data?.error?.email && <p className="form-error">{data?.error?.email}</p>}
               <br />
             </div>

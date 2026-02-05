@@ -7,13 +7,13 @@ const {authValidation} = require('../middleware/authMiddleWare')
 router.get('/users',getAllUsers.bind(this));
 
 // Route to get a user profile
-router.get('/user/profile/:id',authValidation,getProfile)
+router.get('/user/profile',authValidation,getProfile)
 // Route to create a new user
 router.post('/user/register',createUser);
 //Route to update user details
-router.put('/user/profile/edit/:id',authValidation,updateUser);
+router.put('/user/profile/edit/',authValidation,updateUser);
 //Router to delete a user
-router.delete('/user/delete/:id',authValidation,deleteUser);
+router.delete('/user/profile/delete/',authValidation,deleteUser);
 //Router to login a user
 router.post('/user/login',loginUser);
 //Router to logout a user

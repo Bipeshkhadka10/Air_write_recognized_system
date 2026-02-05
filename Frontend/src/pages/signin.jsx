@@ -2,8 +2,9 @@ import React, { useActionState } from "react";
 import { useState,useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { FiLock, FiUnlock } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
+import { FiLock, FiUnlock ,FiMail} from "react-icons/fi";
+import { data, Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../api/authContex.jsx";
 import api from '../api/axios.js'
 
     // form submission handler 
@@ -44,7 +45,8 @@ import api from '../api/axios.js'
             if(response.status === 200){
                 return{
                     success:true,
-                    message:"successfully signed in"
+                    message:"successfully signed in",
+                    data:response.data.data
                 }
             }
         } catch (error) {
@@ -68,6 +70,7 @@ import api from '../api/axios.js'
 
 function Signin(){
     const navigate = useNavigate();
+    const {setUser,loading} = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [data,formAction,isPending] = useActionState(handleFormSubmit,{
         success:false,
@@ -77,10 +80,11 @@ function Signin(){
 
     useEffect(()=>{
         if(data?.success){
-            navigate('/dashboard');
-            console.log('sigined in successfully');
-        }else{
-            navigate('/signin');
+            setUser(data.data);
+            if(loading) return <div>loading...</div>;
+             navigate('/dashboard');
+            console.log('sigined in successfully',data.data);
+            
         }
     },[data])
 
@@ -88,13 +92,13 @@ function Signin(){
         <div className="login-container">
         <div className="login-content">
 
-        <div id="logo-content">
-            <div id="logo">
-                <Link to='/'><img src="../public/logo.jpg" alt="logo" title="Air_write_system" /></Link>
+        <div id="logo-content flex flex-col justify-center items-center">
+            <div className="logo mt-4 p-3 flex justify-center items-center">
+                <Link to='/'><img src="../public/logo.jpg" alt="logo" title="Air_write_system" className="h-20 rounded-xl" /></Link>
             </div>
-            <div id="logo-discp">
-                <h2>Welcome Back</h2>
-                <p className="text">Sign in to continue to AirWrite</p>
+            <div id="logo-discp flex">
+                <h2 className="font-bold text-4xl">Welcome Back</h2>
+                <p className="text-sm text-gray-500">Sign in to continue to AirWrite</p>
             </div>
         </div>
 
@@ -102,10 +106,13 @@ function Signin(){
         <form action={formAction} method="post">
         
         <div className="form-content">
-            <label htmlFor="email">Email</label>
-            <input type="email" name="email" id="email" placeholder="name@example.com"  required autoFocus/>
-            {data?.error?.email && <p className="form-error">{data?.error?.email}</p>}
-            <br />
+           <div className="email-field">
+                <label htmlFor="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="name@example.com"  required autoFocus/>
+                <FiMail className="icons position-absolute top-10"/>
+                {data?.error?.email && <p className="form-error">{data?.error?.email}</p>}
+                <br />
+            </div>
             <label htmlFor="password">password</label>
             <div className="password-field">
                 <input type={showPassword ? "text" : "password"} name="password" id="password" placeholder="enter your password"  required/>

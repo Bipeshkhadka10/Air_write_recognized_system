@@ -4,20 +4,20 @@ import logo from '../assets/logo1.webp'
 import { FiLogOut } from 'react-icons/fi'
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import api from '../api/axios.js';
+import { useAuth } from '../api/authContex.jsx'
 const sidebarContext = createContext();
 
 
 
 export default function Slidebar({ children }) {
   const [expand, setExpand] = useState(true);
-
+  const {logOut,user} = useAuth();
+  const navigate = useNavigate();
+ 
   const handleLogout = async() => {
     // Clear user session or authentication tokens here
-    const response = await api.post('/user/logout')
-    if(response?.status === 200){
-      console.log('logout successfully');
-      window.location.href = '/';
-    }
+   await logOut();
+    window.location.href = '/signin';
   }
   return (
     <div className='flex h-full w-full'>
@@ -40,13 +40,13 @@ export default function Slidebar({ children }) {
           </sidebarContext.Provider>
 
           {/* Footer */}
-          <div className='p-3 border-t'>
+          <div className='p-3 border-t cursor-pointer'>
             <div className={`flex w-full ${expand ? 'gap-3' : 'justify-center'}`}>
-              <img src="/right.webp" alt="" className='rounded-md h-10 w-10' />
+              <img src={user?.avatar || logo} onClick={()=>navigate('/dashboard/settings')} alt="user_avatar" className='rounded-md h-10 w-10' />
               {expand && (
                 <div className='leading-4'>
-                  <h4 className='font-semibold'>Joy Boss</h4>
-                  <span className='text-xs text-gray-600'>Joy@gmail.com</span>
+                  <h4 className='font-semibold'>{user?.name ||"Joy Boss"}</h4>
+                  <span className='text-xs text-gray-600'>{user?.email || "No email available"}</span>
                 </div>
               )}
             </div>

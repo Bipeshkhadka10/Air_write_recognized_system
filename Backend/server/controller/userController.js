@@ -77,18 +77,11 @@ exports.createUser =async(req,res)=>{
 // controller to get user profile
 exports.getProfile= async(req,res)=>{
     try {
-        const userId = req.params.id;
-        const user = await User.findById(userId).select('-password');
-        if(user){
-            res.status(200).json({
-                message:"user data fetched successfully",
-                data:user
-            })
-        }else{
-            res.status(404).json({
-                message:"user not found"
-            })
-        }
+        const userId = req.user._id;
+        res.status(200).json({
+            message:"user profile fetched successfully",
+            data:req.user
+        });
     } catch (error) {
         res.status(500).json({message:"internal server error",
             error:error.message
@@ -99,7 +92,7 @@ exports.getProfile= async(req,res)=>{
 // controller to update user details
 exports.updateUser =async(req,res)=>{
     try {
-        const userId = req.params.id;
+        const userId = req.user._id;
 
         const updates = {};
 
@@ -121,13 +114,8 @@ exports.updateUser =async(req,res)=>{
             const userData = response.toObject();       // to remove password from response so it's not visible to client
             delete userData.password;
             res.status(200).json({
-                message:"user updated successfully",
+                message:"Profile updated successfully",
                 data:userData
-            })
-        }else{
-            res.status(404).json({
-                message:"user not found",
-                data:null
             })
         }
     }catch (error) {
@@ -143,21 +131,18 @@ exports.updateUser =async(req,res)=>{
 // controller to delete a user
 exports .deleteUser = async(req,res)=>{
     try {
-        const userId =req.params.id;
-        if(await User.findById(userId)){
-            const response =await User.findByIdAndDelete(userId);
-            const userData = response.toObject();       // to remove password from response so it's not visible to client
-            delete userData.password;
+        const userId =req.user._id;
+        await User.findByIdAndDelete(userId);
+        res.cookie("jwt","",{
+            httpOnly:true,
+            expires:new Date(0)
+        });
             res.status(200).json({
-                message:"user deleted successfully",
-                data:userData
+                message:"Account deleted successfully",
+                data:null
             })
-        } 
-        else{
-            res.status(404).json({
-                message:"user not found, Invalid userID"
-            })
-        }
+        
+       
     } catch (error) {
         res.status(500).json({
             message:"internal server error",

@@ -13,6 +13,7 @@ import Dashboard from './dashboard';
 import LiveWriting from './liveWriting';
 import ModelStatus from './modelStatus';
 import Settings from './settings';
+import ProtectedRoute from './protectedRoute';
     const router = createBrowserRouter([
         {
             path:'/',
@@ -27,9 +28,9 @@ import Settings from './settings';
                 {path:'forgot-password', element:<ForgetPassword/>},
             ]
         },
-        {
+        {   
             path:'/dashboard',
-            element:<UserDashbord />,
+            element:<ProtectedRoute><UserDashbord /></ProtectedRoute>,
             children:[
               {index:true ,element:<Dashboard/> },
               {path:'livewriting', element:<LiveWriting/> },
