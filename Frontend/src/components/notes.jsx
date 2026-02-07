@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
+import jsPDF from "jspdf";
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FiSearch } from 'react-icons/fi'
 // import getnotes from '../api/getnotes.js'
-import { User, Trash2, Download, Search  } from 'lucide-react'
+import { User, Trash2, Download, Search, Edit  } from 'lucide-react'
 import api from '../api/axios.js'
 
 
@@ -56,6 +57,17 @@ export default function Notes() {
     console.log("error while deleting note", error);
   }
 };
+
+
+//  handle pdf
+  const downloadPDF = (note) => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text(note.title || "Untitled Note", 10, 20);
+    doc.setFontSize(12);
+    doc.text(note.recognizedText || "", 10, 30);
+    doc.save(`${note.title || "note"}.pdf`);
+  };
 
   
   return (
@@ -112,10 +124,10 @@ export default function Notes() {
           <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
           <button onClick={()=>setactiveMenu(activeMenu === item?._id ? null : item?._id)} className="text-gray-500 w-3 h-6 rounded-sm cursor-pointer hover:text-gray-600 hover:bg-blue-100 ">⋮</button>
             {activeMenu == item._id && (
-              <div className='absolute right-0 top-6 bg-white shadow-md rounded-md p-0.5 flex flex-col gap-1'>
-              <button className='flex items-center  px-3  hover:bg-gray-300 rounded-md w-full text-left ' >edit</button>
-              <button onClick={()=>{handleDelete(item?._id)}} className='flex items-center  px-3  hover:bg-gray-300 rounded-md w-full text-left' >delete</button>
-              <button className='flex items-center  px-3  hover:bg-gray-300 rounded-md w-full text-left' >share</button>
+              <div className='absolute right-0 top-7 bg-white shadow-md rounded-md p-1 flex gap-3 w-20  justify-center items-center'>
+              <button className='text-gray-600 hover:text-sky-500' ><Edit className='h-4 w-4' /></button>
+              <button onClick={()=>{handleDelete(item?._id)}} className='text-gray-600 hover:text-sky-500' ><Trash2 className='w-4 h-4' /></button>
+              <button onClick={()=>{downloadPDF(item)}} className="text-gray-600 hover:text-sky-500"><Download className="w-4 h-4" /></button>
             </div>)}
         </div>
         <h3 className="font-semibold mb-1 text-left">{item?.title}</h3>
@@ -142,8 +154,8 @@ export default function Notes() {
           </div>
           <span className="text-xs w-32 text-gray-400">{new Date(item?.createdAt).toLocaleString() || "No date"}</span>
           <div className="flex gap-4 px-2">
-            <button className="text-gray-400 hover:text-gray-600"><Download className="w-4 h-4" /></button>
-            <button className="text-gray-400 hover:text-gray-600"><Trash2 className="w-4 h-4" /></button>
+            <button onClick={()=>{downloadPDF(item)}} className="text-gray-400 hover:text-gray-600"><Download className="w-4 h-4" /></button>
+            <button onClick={()=>handleDelete(item?._id)} className="text-gray-400 hover:text-gray-600"><Trash2 className="w-4 h-4" /></button>
           </div>
         </div>
         ))
