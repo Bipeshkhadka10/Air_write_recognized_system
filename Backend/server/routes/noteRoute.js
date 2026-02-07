@@ -1,16 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const Note = require('../model/note');
-const{getAllNotes, createNote,updateNote,deleteNote}= require('../controller/noteController')
+const {authValidation} = require('../middleware/authMiddleWare')
+const{getAllNotes, createNote,updateNote,deleteNote ,getRecentNotes}= require('../controller/noteController')
 
 // Route to get all Notes
-router.get('/Notes',getAllNotes.bind(this));
+router.get('/notes',authValidation,getAllNotes.bind(this));
+// Route to get recent Notes
+router.get('/recent',authValidation,getRecentNotes.bind(this));
 // Route to create a new Note
-router.post('/Note',createNote.bind(this));
+router.post('/note',createNote.bind(this));
 //Route to update Note details
-router.put('/Note/:id',updateNote.bind(this));
+router.put('/note/:id',authValidation,updateNote.bind(this));
 //Router to delete a Note
-router.delete('/Note/:id',deleteNote.bind(this));
+router.delete('/note/:id',authValidation,deleteNote.bind(this));
 
 
 module.exports = router;

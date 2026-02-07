@@ -4,7 +4,7 @@ const User = require('../model/user');
 // Controller to get all Notes
 exports.getAllNotes = async(req,res)=>{
     try {
-        const response = await Note.find();
+        const response = await Note.find({userId:req.user?._id});
         if(response){
             res.status(200).json({
                 message:"Notes fetched successfully",
@@ -27,8 +27,8 @@ exports.getAllNotes = async(req,res)=>{
 // controller to create a new Note
 exports.createNote = async(req,res)=>{
     try {
-        const userId = req.user.userId;
-        const {title,recognizedText,strokeImagePath,} = req.body;
+        // const userId = req.user._id;
+        const {title,recognizedText,strokeImagePath,userId} = req.body;
         if(!title){
             return res.status(400).json({
                 message:"Title is required"
@@ -54,7 +54,7 @@ exports.createNote = async(req,res)=>{
 // controller to update user details
 exports.updateNote = async(req,res)=>{
     try {
-        const userId = req.user.userId;
+        const userId = req.user._id;
         const NoteId = req.params.id;
         const updates = {};
         //Dynamic updates
@@ -64,6 +64,15 @@ exports.updateNote = async(req,res)=>{
             updates[key]=req.body[key];
         }
        }
+
+    //    validating the Note ownership
+    const note = await Note.findById(NoteId);
+    if(!note || note.userId?.toString() !== userId.toString()){
+        return res.status(404).json({
+            message:"Note not found or you are not authorized to update this Note"
+        })
+    } 
+
        const response = await Note.findByIdAndUpdate(NoteId,updates,{
                 new:true,
                 runValidators:true,
@@ -95,6 +104,13 @@ exports .deleteNote = async(req,res)=>{
         const noteId =req.params.id;
         
         const response =await Note.findByIdAndDelete(noteId);
+
+        //    validating the Note ownership
+        if(!response || response.userId?.toString() !== userId.toString()){
+        return res.status(404).json({
+            message:"Note not found or you are not authorized to update this Note"
+        })
+    } 
         if(response){
             res.status(200).json({
                 message:"Note deleted successfully",
@@ -111,4 +127,26 @@ exports .deleteNote = async(req,res)=>{
             error:error.message
         })
     }
+}
+
+
+
+// controller to get recent notes
+
+exports.getRecentNotes = async(req,res)=>{
+    try {
+        const response = await Note.find({userId : req.user._id}).sort({createdAt:-1});
+         res.status(200).json({
+            message:"Recent Notes fetched successfully",
+            data:response
+            })
+        
+        
+        }
+     catch (error) {
+        res.status(500).json({
+            message:"internal server error",
+            error:error.message
+        })
+        }
 }

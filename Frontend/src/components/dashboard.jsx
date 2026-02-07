@@ -2,8 +2,34 @@ import React from 'react'
 import { FiSearch,FiZap } from 'react-icons/fi'
 import { User,FileText,Activity,PenTool } from 'lucide-react'
 import { Outlet ,useNavigate } from 'react-router-dom'
+import {useAuth} from "../api/authContex"
+import { useState } from 'react'
+import { useEffect } from 'react'
+import api from '../api/axios.js'
+
+
+
 export default function Dashboard({expand}) {
+    const [recentNote, setRecentNote] = useState([]);
+    var noteLimits = recentNote.slice(0,3);
+    console.log(noteLimits);
     const navigate = useNavigate();
+
+    const {user,setUser} = useAuth();
+    
+    useEffect(()=>{
+        const getRecentNotes= async()=>{
+        try {
+            console.log("fetching data.....")
+            let res = await api.get('/recent',{withCredentials:true})
+            setRecentNote(res.data.data)
+        } catch (error) {
+            console.log("error while fetching recent notes",error);
+        }
+    }
+        getRecentNotes();
+        
+    },[])
   return (
     <div className='h-screen w-full'>
       {/* Header */}
@@ -30,7 +56,7 @@ export default function Dashboard({expand}) {
             <div className='reletive h-20 w-50 rounded-md flex  justify-around  items-center shadow-md'>
                 <div className='text-left'>
                     <span className='text-sm'>Total Notes</span>
-                    <h3 className='text-2xl font-semibold'>24</h3>
+                    <h3 className='text-2xl font-semibold'>{recentNote.length || 0}</h3>
                 </div>
                 <div className='h-8 w-8 rounded-md flex justify-center items-center bg-gray-200'>
                     <FileText size={24} className='text-gray-600'/> </div>
@@ -98,22 +124,16 @@ export default function Dashboard({expand}) {
             </div>
 
             {/* notes */}
-             <div className='h-full p-2.5 w-full justify-evenly flex  items-center gap-2'>
-                    <div className='w-90 p-2 flex flex-col  justify-start bg-white shadow-lg rounded-md border transform transition-all duration-300 hover:scale-[1.02]'>
-                    <span className='font-semibold text-left'>Meeting</span>
-                    <span className='text-sm text-left'>Discuss about project timeline</span>
+            <div className='h-full p-2.5 w-full justify-evenly flex  items-center gap-2'>
+                {recentNote.length > 0  && recentNote.map((item,index)=>(
+                <div key={item?._id} className='w-90 p-2 flex flex-col  justify-start bg-white shadow-lg rounded-md border transform transition-all duration-300 hover:scale-[1.02]'>
+                    <span className='font-semibold text-left'>{item?.title}</span>
+                    <span className='text-sm text-left'>{item?.recognizedText}</span>
                     <span className='text-sm text-left'>2 hour ago</span>
                 </div>
-                <div className='w-90 p-2 flex flex-col  justify-start bg-white shadow-lg rounded-md border transform transition-all duration-300 hover:scale-[1.02]'>
-                    <span className='font-semibold text-left'>Meeting</span>
-                    <span className='text-sm text-left'>Discuss about project timeline</span>
-                    <span className='text-sm text-left'>2 hour ago</span>
-                </div>
-                   <div className='w-90 p-2 flex flex-col  justify-start bg-white shadow-lg rounded-md border transform transition-all duration-300 hover:scale-[1.02]'>
-                    <span className='font-semibold text-left'>Meeting</span>
-                    <span className='text-sm text-left'>Discuss about project timeline</span>
-                    <span className='text-sm text-left'>2 hour ago</span>
-                </div>
+                ))
+            }
+
             </div>
         </div>
       </div>

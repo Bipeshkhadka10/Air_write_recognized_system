@@ -1,11 +1,49 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FiSearch } from 'react-icons/fi'
+// import getnotes from '../api/getnotes.js'
 import { User, Trash2, Download  } from 'lucide-react'
+import api from '../api/axios.js'
+
+
+
 export default function Notes() {
   const navigate = useNavigate()
   const [listView, setListView] = useState(false);
+  const [notes, setNotes] = useState([]);
+  const [show,setShow] = useState(false);
+
+  // getting notes from backend
+  const getnotes = async()=>{
+    try {
+      const noteslist = await api.get('/notes',{withCredentials:true})
+      if(noteslist.data && noteslist.data.data){
+        setNotes(noteslist.data.data);
+        console.log("notes fetched successfully",noteslist.data.data);
+      }
+    } catch (error) {
+      console.log("error while fetching notes",error);
+    }
+  }
+
+  useEffect(()=>{
+    getnotes()
+  },[])
+
+
+  // handle delete note
+  const handleDelete = async(noteId)=>{
+    try {
+      const response = await api.delete(`/note/${noteId}`, {withCredentials:true});
+      if(response.status === 200){
+        getnotes(); // refresh the notes list
+      }
+    } catch (error) {
+      console.log("error while deleting note",error);
+    }
+  }
+  
   return (
 //   <!-- Page Container -->
   <div className="min-h-screen">
@@ -53,169 +91,51 @@ export default function Notes() {
     <!-- Notes Grid --> */}
     <div className={`${!listView ? 'grid sm:grid-cols-2 lg:grid-cols-3 gap-6 px-6 mb-10' : 'flex flex-col px-6 mb-10'}`}>
 
-      {/* <!-- Card --> */}
-      <div className={`${!listView ? 'bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition' : 'hidden'}`}>
-        <div className="flex justify-between items-start mb-3">
+     {notes.length > 0 ? notes.map((item,index)=>(
+        <div key={item._id} className={`${!listView ? 'bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition' : 'hidden'}`}>
+        <div className="relative flex justify-between items-start mb-3">
           <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <button className="text-gray-400 hover:text-gray-600">⋮</button>
+          <button onMouseOver={()=>{setShow(!show)}} className="text-gray-500 w-3 h-6 rounded-sm cursor-pointer hover:text-gray-600 hover:bg-blue-100 ">⋮</button>
+            {show && (<div className='absolute right-0 top-6 bg-white shadow-md rounded-md p-0.5 flex flex-col gap-1'>
+              <button className='flex items-center  px-3  hover:bg-gray-300 rounded-md w-full text-left ' >edit</button>
+              <button onClick={async(noteId)=>{await api.delete(`/note/${item._id}`)}} className='flex items-center  px-3  hover:bg-gray-300 rounded-md w-full text-left' >delete</button>
+              <button className='flex items-center  px-3  hover:bg-gray-300 rounded-md w-full text-left' >share</button>
+            </div>)}
         </div>
-        <h3 className="font-semibold mb-1 text-left">Meeting Notes – Project Review</h3>
-        <p className="text-sm text-gray-500 mb-3 text-left">Discussed Q4 roadmap and key deliverables. Team agreed on timeline adjustments...</p>
+        <h3 className="font-semibold mb-1 text-left">{item?.title}</h3>
+        <p className="text-sm text-gray-500 mb-3 text-left">{item?.recognizedText}</p>
         <div className="flex justify-between text-xs text-gray-400">
-          <span>2024-01-15</span>
-          <span>245 chars</span>
+          <span>{new Date(item.createdAt).toLocaleDateString() || 'No date'}</span>
+          <span>{item?.recognizedText?.length || 0} chars</span>
         </div>
       </div>
+     ))
+     :listView ? null : <p className="text-left  text-gray-500">No notes available</p>}
 
-      {/* <!-- Card --> */}
-      <div className={`${!listView ? 'bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition' : 'hidden'}`}>
-        <div className="flex justify-between items-start mb-3">
-          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <button className="text-gray-400 hover:text-gray-600">⋮</button>
-        </div>
-        <h3 className="font-semibold mb-1 text-left">Quick Ideas</h3>
-        <p className="text-sm text-gray-500 mb-3 text-left">New feature suggestions: gesture shortcuts, voice commands integration...</p>
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>2024-01-14</span>
-          <span>128 chars</span>
-        </div>
-      </div>
-
-      {/* <!-- Card --> */}
-      <div className={`${!listView ? 'relative bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition' : 'hidden'}`}>
-        <div className="flex justify-between items-start mb-3">
-          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <button className="text-gray-400 hover:text-gray-600">⋮</button>
-        </div>
-        <h3 className="font-semibold mb-1 text-left">Math Equations</h3>
-        <p className="text-sm text-gray-500 mb-3 text-left">Quadratic formula solutions and practice problems.</p>
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>2024-01-13</span>
-          <span>312 chars</span>
-        </div>
-      </div>
-
-      {/* <!-- Card --> */}
-      <div className={`${!listView ? 'bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition' : 'hidden'}`}>
-        <div className="flex justify-between items-start mb-3">
-          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <button className="text-gray-400 hover:text-gray-600">⋮</button>
-        </div>
-        <h3 className="font-semibold mb-1 text-left">Presentation Outline</h3>
-        <p className="text-sm text-gray-500 mb-3 text-left">Introduction, key points, demo section, Q&A structure...</p>
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>2024-01-12</span>
-          <span>189 chars</span>
-        </div>
-      </div>
-
-      {/* <!-- Card --> */}
-      <div className={`${!listView ? 'bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition' : 'hidden'}`}>
-        <div className="flex justify-between items-start mb-3">
-          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <button className="text-gray-400 hover:text-gray-600">⋮</button>
-        </div>
-        <h3 className="font-semibold mb-1 text-left">Research Notes</h3>
-        <p className="text-sm text-gray-500 mb-3 text-left">CNN architecture comparison, accuracy benchmarks, optimization techniques...</p>
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>2024-01-11</span>
-          <span>456 chars</span>
-        </div>
-      </div>
-
-      {/* <!-- Card --> */}
-      <div className={`${!listView ? 'bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition' : 'hidden'}`}>
-        <div className="flex justify-between items-start mb-3">
-          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <button className="text-gray-400 hover:text-gray-600">⋮</button>
-        </div>
-        <h3 className="font-semibold mb-1 text-left">Daily Journal</h3>
-        <p className="text-sm text-gray-500 mb-3 text-left">Progress on air writing project, challenges encountered, next steps...</p>
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>2024-01-10</span>
-          <span>234 chars</span>
-        </div>
-      </div>
-
-      {/* listing View */}
+      {/* listing notes */}
        <div className={`${listView ? ' bg-white py-5 px-3 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition': 'hidden'}`}>
-        <div className="flex justify-between items-center px-2 mb-3 hover:shadow-sm hover:scale-101 transform transition-all ease duration-300 rounded-xl hover:border">
+        {notes.length > 0 ? notes.map((item, index)=>(
+          <div key={item._id} className="flex justify-between items-center px-2 mb-3 hover:shadow-sm hover:scale-101 transform transition-all ease duration-300 rounded-xl hover:border">
           <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
           <div className="flex flex-col px-4 w-full">
-            <h3 className="font-semibold text-left">Daily Journal</h3>
-            <p className="text-sm text-gray-500  text-left">Progress on air writing project, challenges encountered, next steps...</p>
+            <h3 className="font-semibold text-left">{item?.title}</h3>
+            <p className="text-sm text-gray-500  text-left">{item?.recognizedText}</p>
           </div>
-          <span className="text-xs w-32 text-gray-400">2024-01-10</span>
+          <span className="text-xs w-32 text-gray-400">{new Date(item?.createdAt).toLocaleString() || "No date"}</span>
           <div className="flex gap-4 px-2">
             <button className="text-gray-400 hover:text-gray-600"><Download className="w-4 h-4" /></button>
             <button className="text-gray-400 hover:text-gray-600"><Trash2 className="w-4 h-4" /></button>
           </div>
         </div>
-        <div className="flex justify-between items-center px-2 mb-3 hover:shadow-sm hover:scale-101 transform transition-all ease duration-300 rounded-xl hover:border">
-          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <div className="flex flex-col px-4 w-full">
-            <h3 className="font-semibold text-left">Daily Journal</h3>
-            <p className="text-sm text-gray-500  text-left">Progress on air writing project, challenges encountered, next steps...</p>
-          </div>
-          <span className="text-xs w-30 text-gray-400">2024-01-10</span>
-          <div className="flex gap-4 px-2">
-            <button className="text-gray-400 hover:text-gray-600"><Download className="w-4 h-4" /></button>
-            <button className="text-gray-400 hover:text-gray-600"><Trash2 className="w-4 h-4" /></button>
-          </div>
-        </div>
-        <div className="flex justify-between items-center px-2 mb-3 hover:shadow-sm hover:scale-101 transform transition-all ease duration-300 rounded-xl hover:border">
-          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <div className="flex flex-col px-4 w-full">
-            <h3 className="font-semibold text-left">Daily Journal</h3>
-            <p className="text-sm text-gray-500  text-left">Progress on air writing project, challenges encountered, next steps...</p>
-          </div>
-          <span className="text-xs w-30 text-gray-400">2024-01-10</span>
-          <div className="flex gap-4 px-2">
-            <button className="text-gray-400 hover:text-gray-600"><Download className="w-4 h-4" /></button>
-            <button className="text-gray-400 hover:text-gray-600"><Trash2 className="w-4 h-4" /></button>
-          </div>
-        </div>
-        <div className="flex justify-between items-center px-2 mb-3 hover:shadow-sm hover:scale-101 transform transition-all ease duration-300 rounded-xl hover:border">
-          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <div className="flex flex-col px-4 w-full">
-            <h3 className="font-semibold text-left">Daily Journal</h3>
-            <p className="text-sm text-gray-500  text-left">Progress on air writing project, challenges encountered, next steps...</p>
-          </div>
-          <span className="text-xs w-30 text-gray-400">2024-01-10</span>
-          <div className="flex gap-4 px-2">
-            <button className="text-gray-400 hover:text-gray-600"><Download className="w-4 h-4" /></button>
-            <button className="text-gray-400 hover:text-gray-600"><Trash2 className="w-4 h-4" /></button>
-          </div>
-        </div>
-        <div className="flex justify-between items-center px-2 mb-3 hover:shadow-sm hover:scale-101 transform transition-all ease duration-300 rounded-xl hover:border">
-          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <div className="flex flex-col px-4 w-full">
-            <h3 className="font-semibold text-left">Daily Journal</h3>
-            <p className="text-sm text-gray-500  text-left">Progress on air writing project, challenges encountered, next steps...</p>
-          </div>
-          <span className="text-xs w-30 text-gray-400">2024-01-10</span>
-          <div className="flex gap-4 px-2">
-            <button className="text-gray-400 hover:text-gray-600"><Download className="w-4 h-4" /></button>
-            <button className="text-gray-400 hover:text-gray-600"><Trash2 className="w-4 h-4" /></button>
-          </div>
-        </div>
-        <div className="flex justify-between items-center px-2 mb-3 hover:shadow-sm hover:scale-101 transform transition-all ease duration-300 rounded-xl hover:border">
-          <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <div className="flex flex-col px-4 w-full">
-            <h3 className="font-semibold text-left">Daily Journal</h3>
-            <p className="text-sm text-gray-500  text-left">Progress on air writing project, challenges encountered, next steps...</p>
-          </div>
-          <span className="text-xs w-30 text-gray-400">2024-01-10</span>
-          <div className="flex gap-4 px-2">
-            <button className="text-gray-400 hover:text-gray-600"><Download className="w-4 h-4" /></button>
-            <button className="text-gray-400 hover:text-gray-600"><Trash2 className="w-4 h-4" /></button>
-          </div>
-        </div>
+        ))
+      : <p className="text-left  text-gray-500">No notes available</p>}
       </div>
-  
 
     </div>
   </div>
 
   )
 }
+
+
+
