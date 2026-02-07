@@ -26,8 +26,8 @@ export default function Slidebar({ children }) {
 
           {/* Header */}
           <div className="p-4 flex justify-between items-center border-b h-16 overflow-hidden">
-            <img src={logo} alt="air-write-logo"
-              className={`transition-all duration-300 ${expand ? 'w-32' : 'w-0'}`} />
+            <img onClick={()=>navigate('/')} src={logo} alt="air-write-logo"
+              className={`cursor-pointer transition-all duration-300 ${expand ? 'w-32' : 'w-0'}`} />
             <button
               onClick={() => setExpand(!expand)}
               className='w-8 h-8 flex justify-center items-center rounded-md hover:bg-indigo-500 hover:text-white transition'>
