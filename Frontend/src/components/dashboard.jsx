@@ -124,12 +124,12 @@ export default function Dashboard({expand}) {
             </div>
 
             {/* notes */}
-            <div className='h-full p-2.5 w-full justify-evenly flex  items-center gap-2'>
+            <div className='h-full p-2.5 w-full justify-evenly flex flex-wrap items-center gap-2'>
                 {recentNote.length > 0  && recentNote.map((item,index)=>(
-                <div key={item?._id} className='w-90 p-2 flex flex-col  justify-start bg-white shadow-lg rounded-md border transform transition-all duration-300 hover:scale-[1.02]'>
-                    <span className='font-semibold text-left'>{item?.title}</span>
-                    <span className='text-sm text-left'>{item?.recognizedText}</span>
-                    <span className='text-sm text-left'>2 hour ago</span>
+                <div key={item?._id} className='w-[30%] h-30 p-2 flex flex-col  justify-start bg-white shadow-lg rounded-md border transform transition-all duration-300 hover:scale-[1.02]'>
+                    <span className='font-semibold text-left line-clamp-1'>{item?.title}</span>
+                    <span className='text-sm text-left line-clamp-2'>{item?.recognizedText}</span>
+                    <span className='text-sm text-left mt-3 '>2 hour ago</span>
                 </div>
                 ))
             }

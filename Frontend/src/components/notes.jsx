@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FiSearch } from 'react-icons/fi'
 // import getnotes from '../api/getnotes.js'
-import { User, Trash2, Download  } from 'lucide-react'
+import { User, Trash2, Download, Search  } from 'lucide-react'
 import api from '../api/axios.js'
 
 
@@ -12,8 +12,20 @@ export default function Notes() {
   const navigate = useNavigate()
   const [listView, setListView] = useState(false);
   const [notes, setNotes] = useState([]);
-  const [show,setShow] = useState(false);
+  const [activeMenu , setactiveMenu] = useState(null);
+  const [search, setSearch] = useState('');
+  
+  // filtering function for search
+ const filterNotes = () =>
+    notes.filter((note) =>(
+    !search.trim() ? true 
+    : note.title?.toLowerCase().includes(search.toLowerCase()) ||
+    note.recognizedText?.toLowerCase().includes(search.toLowerCase())
+    )
+   
+  );
 
+ 
   // getting notes from backend
   const getnotes = async()=>{
     try {
@@ -33,16 +45,18 @@ export default function Notes() {
 
 
   // handle delete note
-  const handleDelete = async(noteId)=>{
-    try {
-      const response = await api.delete(`/note/${noteId}`, {withCredentials:true});
-      if(response.status === 200){
-        getnotes(); // refresh the notes list
-      }
-    } catch (error) {
-      console.log("error while deleting note",error);
+  const handleDelete = async (noteId) => {
+  try {
+    const response = await api.delete(`/note/${noteId}`, { withCredentials: true });
+    if (response.status === 200) {
+      setNotes((prevNotes) => prevNotes.filter(note => note._id !== noteId));
+      setactiveMenu(null)
     }
+  } catch (error) {
+    console.log("error while deleting note", error);
   }
+};
+
   
   return (
 //   <!-- Page Container -->
@@ -71,8 +85,9 @@ export default function Notes() {
 
       {/* <!-- Search Notes --> */}
       <div className="relative w-full md:w-96">
-        <input type="text" placeholder="Search notes..." className="pl-10 pr-4 py-2 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-blue-400 focus:outline-none w-full" />
+        <input type="text" placeholder="Search notes..." value={search} onChange={(e)=>setSearch(e.target.value)} className="pl-10 pr-4 py-2 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-blue-400 focus:outline-none w-full" />
         <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
+        
       </div>
 
       {/* <!-- View Toggle + New Note --> */}
@@ -91,35 +106,39 @@ export default function Notes() {
     <!-- Notes Grid --> */}
     <div className={`${!listView ? 'grid sm:grid-cols-2 lg:grid-cols-3 gap-6 px-6 mb-10' : 'flex flex-col px-6 mb-10'}`}>
 
-     {notes.length > 0 ? notes.map((item,index)=>(
+     {filterNotes().length > 0 && filterNotes().map((item,index)=>(
         <div key={item._id} className={`${!listView ? 'bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition' : 'hidden'}`}>
         <div className="relative flex justify-between items-start mb-3">
           <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
-          <button onMouseOver={()=>{setShow(!show)}} className="text-gray-500 w-3 h-6 rounded-sm cursor-pointer hover:text-gray-600 hover:bg-blue-100 ">⋮</button>
-            {show && (<div className='absolute right-0 top-6 bg-white shadow-md rounded-md p-0.5 flex flex-col gap-1'>
+          <button onClick={()=>setactiveMenu(activeMenu === item?._id ? null : item?._id)} className="text-gray-500 w-3 h-6 rounded-sm cursor-pointer hover:text-gray-600 hover:bg-blue-100 ">⋮</button>
+            {activeMenu == item._id && (
+              <div className='absolute right-0 top-6 bg-white shadow-md rounded-md p-0.5 flex flex-col gap-1'>
               <button className='flex items-center  px-3  hover:bg-gray-300 rounded-md w-full text-left ' >edit</button>
-              <button onClick={async(noteId)=>{await api.delete(`/note/${item._id}`)}} className='flex items-center  px-3  hover:bg-gray-300 rounded-md w-full text-left' >delete</button>
+              <button onClick={()=>{handleDelete(item?._id)}} className='flex items-center  px-3  hover:bg-gray-300 rounded-md w-full text-left' >delete</button>
               <button className='flex items-center  px-3  hover:bg-gray-300 rounded-md w-full text-left' >share</button>
             </div>)}
         </div>
         <h3 className="font-semibold mb-1 text-left">{item?.title}</h3>
-        <p className="text-sm text-gray-500 mb-3 text-left">{item?.recognizedText}</p>
+        <p className="text-sm text-gray-500 mb-3 text-left line-clamp-2">{item?.recognizedText}</p>
         <div className="flex justify-between text-xs text-gray-400">
           <span>{new Date(item.createdAt).toLocaleDateString() || 'No date'}</span>
           <span>{item?.recognizedText?.length || 0} chars</span>
         </div>
       </div>
      ))
-     :listView ? null : <p className="text-left  text-gray-500">No notes available</p>}
+     }
+     {!listView && filterNotes().length === 0 && search && <p className="text-left  text-gray-500">No matching notes found</p>}
+     {notes.length === 0 && !search && <p className="text-left  text-gray-500">No notes available</p>}
 
       {/* listing notes */}
+      
        <div className={`${listView ? ' bg-white py-5 px-3 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition': 'hidden'}`}>
-        {notes.length > 0 ? notes.map((item, index)=>(
+        {filterNotes().length > 0 && filterNotes().map((item, index)=>(
           <div key={item._id} className="flex justify-between items-center px-2 mb-3 hover:shadow-sm hover:scale-101 transform transition-all ease duration-300 rounded-xl hover:border">
           <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">📄</div>
           <div className="flex flex-col px-4 w-full">
             <h3 className="font-semibold text-left">{item?.title}</h3>
-            <p className="text-sm text-gray-500  text-left">{item?.recognizedText}</p>
+            <p className="text-sm text-gray-500  text-left line-clamp-1">{item?.recognizedText}</p>
           </div>
           <span className="text-xs w-32 text-gray-400">{new Date(item?.createdAt).toLocaleString() || "No date"}</span>
           <div className="flex gap-4 px-2">
@@ -128,7 +147,9 @@ export default function Notes() {
           </div>
         </div>
         ))
-      : <p className="text-left  text-gray-500">No notes available</p>}
+      }
+      {filterNotes().length === 0 && search && <p className="text-left  text-gray-500">No matching notes found</p> }
+      {notes.length === 0 && !search && <p className="text-left  text-gray-500">No notes available</p>}
       </div>
 
     </div>

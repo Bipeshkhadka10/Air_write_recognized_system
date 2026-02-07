@@ -96,57 +96,51 @@ exports.updateNote = async(req,res)=>{
     }
 }
 
+// Delete Note
+exports.deleteNote = async (req, res) => {
+  try {
+    const noteId = req.params.id;
+    const userId = req.user._id;
 
-// controller to delete a note
-exports .deleteNote = async(req,res)=>{
-    try {
-        const userId = req.user.userId;
-        const noteId =req.params.id;
-        
-        const response =await Note.findByIdAndDelete(noteId);
-
-        //    validating the Note ownership
-        if(!response || response.userId?.toString() !== userId.toString()){
-        return res.status(404).json({
-            message:"Note not found or you are not authorized to update this Note"
-        })
-    } 
-        if(response){
-            res.status(200).json({
-                message:"Note deleted successfully",
-                data:response
-            })
-        }else{
-            res.status(404).json({
-                message:"Note not found, Invalid NoteID"
-            })
-        }
-    } catch (error) {
-        res.status(500).json({
-            message:"internal server error",
-            error:error.message
-        })
+    const note = await Note.findById(noteId);
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
     }
-}
 
+    if (note.userId?.toString() !== userId?.toString()) {
+      return res.status(403).json({ message: "Not authorized user" });
+    }
 
+    const deletedNote = await Note.findByIdAndDelete(noteId);
 
-// controller to get recent notes
+    return res.status(200).json({
+      message: "Note deleted successfully",
+      data: deletedNote
+    });
 
-exports.getRecentNotes = async(req,res)=>{
-    try {
-        const response = await Note.find({userId : req.user._id}).sort({createdAt:-1});
-         res.status(200).json({
-            message:"Recent Notes fetched successfully",
-            data:response
-            })
-        
-        
-        }
-     catch (error) {
-        res.status(500).json({
-            message:"internal server error",
-            error:error.message
-        })
-        }
-}
+  } catch (error) {
+    console.error("Delete Note Error:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message
+    });
+  }
+};
+
+// Get Recent Notes
+exports.getRecentNotes = async (req, res) => {
+  try {
+    const response = await Note.find({ userId: req.user._id }).sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      message: "Recent notes fetched successfully",
+      data: response
+    });
+  } catch (error) {
+    console.error("Get Recent Notes Error:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message
+    });
+  }
+};
