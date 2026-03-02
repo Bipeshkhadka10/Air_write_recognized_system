@@ -3,6 +3,7 @@ const app = express();
 const db = require('./server/database/db')
 const userRoute = require('./server/routes/userRoute');
 const noteRoute = require('./server/routes/noteRoute');
+const path = require('path');
 const cookieParser = require('cookie-parser');
 // const { notFound, errorHandler } = require('./server/middleware/errorMiddleWare');
 require('dotenv').config();
@@ -14,6 +15,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use('/uploads', express.static(path.join(__dirname, 'server/uploads')));
 
 app.get('/',(req,res)=>{
     res.send('hello world');

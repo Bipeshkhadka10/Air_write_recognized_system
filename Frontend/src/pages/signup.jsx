@@ -108,8 +108,8 @@ function Signup(){
         <div className="login-content">
 
        <div id="logo-content flex flex-col justify-center items-center">
-            <div className="logo mt-4 p-3 flex justify-center items-center">
-                <Link to='/'><img src="../public/logo.jpg" alt="logo" title="Air_write_system" className="h-20 rounded-xl" /></Link>
+            <div className="flex justify-center items-center mt-5">
+                <Link to='/'><img src="../public/logo2.png" alt="logo" title="Air_write_system" className="w-60" /></Link>
             </div>
             <div id="logo-discp flex">
                 <h2 className="font-bold text-4xl">Create Account</h2>
@@ -150,15 +150,15 @@ function Signup(){
             </div>
         </div>
          
-        <div className="login-controls">
+        {/* <div className="login-controls">
             <div id="remember-content" style={{margin:"14px 0px", float:"left"}}>
                 <input type="checkbox" id="remember-password" />
                 <label htmlFor="remember-password">I agree to the <span className="links">Terms of Service </span> and <span className="links">Privacy policy</span></label>
             </div>
             
-        </div>
+        </div> */}
 
-        <button type="submit" disabled={isPending} id="signin-btn" style={isPending ? {opacity:0.5, cursor:"not-allowed"} : {}} >{isPending ? "Creating Account":"Create Account"}</button>
+        <button type="submit" className="mt-5" disabled={isPending} id="signin-btn" style={isPending ? {opacity:0.5, cursor:"not-allowed"} : {}} >{isPending ? "Creating Account":"Create Account"}</button>
 
         <br />
         <p id="continue-line"><span>or continue with</span></p>

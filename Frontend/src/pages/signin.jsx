@@ -11,6 +11,9 @@ import api from '../api/axios.js'
     async function handleFormSubmit(prev, formData){
         const email = formData.get('email');
         const password = formData.get('password');
+        const checked = formData.get('remember-password');
+          
+
         const error = {};
         // regex for validating email and password
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -29,6 +32,14 @@ import api from '../api/axios.js'
         }else if(!passwordRegex.test(password)){
             error.password = "Password must contain at least one uppercase letter, lowercase letter, number, and special character";
         }
+
+        // remember password of user
+            if(checked === "on"){
+                localStorage.setItem("email",`${email}`);
+                console.log(email,password)
+            }
+            
+        
 
         //  checking for any error
         if(Object.keys(error).length > 0){
@@ -72,11 +83,14 @@ function Signin(){
     const navigate = useNavigate();
     const {setUser,loading} = useAuth();
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [remember, setRemember] = useState(false);
     const [data,formAction,isPending] = useActionState(handleFormSubmit,{
         success:false,
         error:{}
     })
-
+ 
 
     useEffect(()=>{
         if(data?.success){
@@ -84,8 +98,11 @@ function Signin(){
             if(loading) return <div>loading...</div>;
              navigate('/dashboard');
             console.log('sigined in successfully',data.data);
-            
         }
+      const savedEmail = localStorage.getItem("email");
+      if(savedEmail){
+        setEmail(savedEmail);
+      }
     },[data])
 
     return(
@@ -93,8 +110,8 @@ function Signin(){
         <div className="login-content">
 
         <div id="logo-content flex flex-col justify-center items-center">
-            <div className="logo mt-4 p-3 flex justify-center items-center">
-                <Link to='/'><img src="../public/logo.jpg" alt="logo" title="Air_write_system" className="h-20 rounded-xl" /></Link>
+            <div className=" flex justify-center items-center mt-5">
+                <Link to='/'><img src="../public/logo2.png" alt="logo" title="Air_write_system" className="w-60 rounded-xl" /></Link>
             </div>
             <div id="logo-discp flex">
                 <h2 className="font-bold text-4xl">Welcome Back</h2>
@@ -106,16 +123,19 @@ function Signin(){
         <form action={formAction} method="post">
         
         <div className="form-content">
-           <div className="email-field">
+           <div className="email-field relative">
+            
                 <label htmlFor="email">Email</label>
-                <input type="email" name="email" id="email" placeholder="name@example.com"  required autoFocus/>
+                <input type="text" name="email" id="email" placeholder="name@example.com" required onFocus={()=>setRemember(true)} />
                 <FiMail className="icons position-absolute top-10"/>
                 {data?.error?.email && <p className="form-error">{data?.error?.email}</p>}
+                {remember &&<div className="absolute w-60 h-8 p-1 rounded-b-md top-16 right-0 z-15 shadow-md bg-gray-100 text-xs font-stretch-semi-condensed text-gray-700  flex items-center justify-center" onClick={()=>{ document.getElementById("email").value = email; setRemember(!remember)}}>{email ? "email: "+email : "No email saved"}
+                    </div>}
                 <br />
             </div>
-            <label htmlFor="password">password</label>
+            <label htmlFor="password">Password</label>
             <div className="password-field">
-                <input type={showPassword ? "text" : "password"} name="password" id="password" placeholder="enter your password"  required/>
+                <input type={showPassword ? "text" : "password"} name="password" id="password"  placeholder="enter your password"  required/>
                 <span className="toggle-eye" onClick={()=>{setShowPassword(!showPassword)}}>{ showPassword ? <FiUnlock/> :<FiLock/> }</span>
                 {data?.error?.password && <p className="form-error">{data?.error?.password}</p>}
              </div>
@@ -123,7 +143,7 @@ function Signin(){
          
         <div className="login-controls">
             <div id="remember-content">
-                <input type="checkbox" id="remember-password" />
+                <input type="checkbox" name="remember-password" id="remember-password"  />
                 <label htmlFor="remember-password">Remember me</label>
             </div>
             <p><span className="links"><Link to='/forgot-password'>Forgot password?</Link></span></p>

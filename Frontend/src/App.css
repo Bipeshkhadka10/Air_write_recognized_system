@@ -1,5 +1,3 @@
-
-
 #root {
   margin: 0 ;
   padding: 0;
@@ -51,7 +49,7 @@
   
 }
 #logo-content #logo-discp h2{
-  padding: 10px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
   font-weight: 700;
   font-family: sans-serif;
 }
@@ -151,7 +149,7 @@ form{
 }
 
 #signin-btn{
-  margin: 0px;
+  
   padding:2px;
   height: 2.3em;
   width: 100%;

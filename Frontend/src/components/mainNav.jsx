@@ -14,6 +14,7 @@ import LiveWriting from './liveWriting';
 import ModelStatus from './modelStatus';
 import Settings from './settings';
 import ProtectedRoute from './protectedRoute';
+import ChangePassword from './changePassword';
     const router = createBrowserRouter([
         {
             path:'/',
@@ -37,6 +38,7 @@ import ProtectedRoute from './protectedRoute';
               {path:'notes', element:<Notes/> },
               {path:'modelstatus', element:<ModelStatus/> },
               {path:'settings', element:<Settings/> },
+              {path:'change-password', element:<ChangePassword/> },
             ]
         }
     ])

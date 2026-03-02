@@ -12,8 +12,8 @@ function Home(){
         <div className="container">
             <div className="content-left" >
                 <div className="content-warp" style={{marginTop:"10vh"}}>
-                    <h1 style={{margin:'0'}}>Write in the Air.</h1>
-                    <h1 style={{margin:'0', color:"#4a6cf7"}}>Capture it Digitally.</h1>
+                    <h1 style={{margin:'0'}}>Write in the Air</h1>
+                    <h1 style={{margin:'0', color:"#4a6cf7"}}>Capture it Digitally</h1>
                 </div>
                 <div className="content-left-text">
                     <p>Transform yout hand gesture into digital text. Our AI-Powered system tracks your fingertip movement in real-time, recoginzing

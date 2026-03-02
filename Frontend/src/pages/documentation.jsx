@@ -10,7 +10,7 @@ export default function Documentation() {
   return (
     <div className='content-wapper'>
           <div className="content-title">
-            <h1>Use Cases & <span className='title-edt'>Applications</span></h1>
+            <h1 className='text-2xl font-bold'>Use Cases & <span className='title-edt'>Applications</span></h1>
             <p>Discover how air writing technology transforms various industries and use <br /> cases.</p>
           </div>
           

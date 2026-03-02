@@ -8,7 +8,7 @@ export default function About() {
   return (
     <div className='content-wapper'>
          <div className="content-title">
-           <h1>How it <span className='title-edt'>Works</span></h1>
+           <h1 className='text-2xl font-bold'>How it <span className='title-edt'>Works</span></h1>
            <p>A seamless pipeline from hand gesture to digital text, powered by state-of-the- <br /> art AI.</p>
          </div>
          

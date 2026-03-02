@@ -6,7 +6,7 @@ function Header() {
     <nav>
        <div className="header">
             <div className="logo" onClick={()=>{navigate('/')}} style={{cursor:"pointer"}}>
-                <h1>AirWrite</h1>
+                <img src="/logo2.png" alt="Air_write_logo" className="w-50 transition hover:scale-102" />
             </div>
             <ul>
                 <li><Link to="/">Home</Link></li>

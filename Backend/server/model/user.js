@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
     avatar:{
         type:String,
     },
+    bio:{
+        type:String,
+    },
     createdAt:{
         type:Date,
         default:Date.now,

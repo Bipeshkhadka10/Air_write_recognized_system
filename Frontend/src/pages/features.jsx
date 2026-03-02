@@ -17,7 +17,7 @@ export default function Features() {
   return (
     <div className='content-wapper'>
       <div className="content-title">
-        <h1>Powered by <span className='title-edt'>Advanced AI</span></h1>
+        <h1 className='text-2xl font-bold'>Powered by <span className='title-edt'>Advanced AI</span></h1>
         <p>Our system combines cutting-edge technologies to delivers seamless air
           <br />writing recognition.</p>
       </div>

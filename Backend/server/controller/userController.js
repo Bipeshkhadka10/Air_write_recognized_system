@@ -17,6 +17,8 @@ exports.getAllUsers =async (req, res) => {
                     "name": user.name,
                     "email": user.email,
                     "avatar": user.avatar,
+                    "bio": user.bio,
+                    "createdAt": user.createdAt,
                 };
             })
             })
@@ -36,8 +38,8 @@ exports.getAllUsers =async (req, res) => {
 // controller to create a new user
 exports.createUser =async(req,res)=>{
        try {
-         const {name,email,password} = req.body;
-        const avatar = req.file?req.file.path:null;
+         const {name,email,password,bio} = req.body;
+        const avatar = req.file?`/uploads/${req.file.filename}`:null;
         
         if(!name || !email || !password ){
             res.status(400).json({message:"name,email and password are required"})
@@ -52,7 +54,8 @@ exports.createUser =async(req,res)=>{
         name,
         email,
         password,
-        avatar
+        avatar,
+        bio
        })
         const response = await newUser.save();
         if(response){
@@ -78,10 +81,17 @@ exports.createUser =async(req,res)=>{
 exports.getProfile= async(req,res)=>{
     try {
         const userId = req.user._id;
-        res.status(200).json({
+        const user = await User.findById(userId).select('-password');
+        if(!user){
+            return res.status(404).json({message:"user not found"})
+        }
+        else{
+            res.status(200).json({
             message:"user profile fetched successfully",
-            data:req.user
+            data:user
         });
+        }
+        
     } catch (error) {
         res.status(500).json({message:"internal server error",
             error:error.message
@@ -103,8 +113,13 @@ exports.updateUser =async(req,res)=>{
             updates.email = req.body.email;
         }
         if(req.file){
-            updates.avatar = req.file.path;
+            updates.avatar = `/uploads/${req.file.filename}`;
+            console.log("new avatar path",updates.avatar);
         }
+        if(req.body.bio){
+            updates.bio = req.body.bio;
+        }
+        console.log("file data",updates.avatar);
 
         const response = await User.findByIdAndUpdate(userId,updates,{
             new:true,
@@ -126,10 +141,65 @@ exports.updateUser =async(req,res)=>{
     }
 }
 
+// controller to change password
+exports.changePassword = async(req,res)=>{
+    try {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+        const userId = req.user._id;
+        
+        const {password:currentPassword, newPassword} = req.body;
+        
+        if(!currentPassword || !newPassword){
+           
+            return res.status(400).json({
+                message:"current password and new password are required"
+            }) 
+        }else if(currentPassword === newPassword){
+           
+            return res.status(400).json({
+                message:"new password must be different from current password"
+            })
+        }else if(!passwordRegex.test(newPassword)){
+           
+            return res.status(400).json({
+                message:"new password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+            })
+            
+        }
+        
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({
+                message:"user not found"
+            })
+        }
+        const isPasswordMatch = await user.comparePasswords(currentPassword);
+        if(!isPasswordMatch){
+            return res.status(401).json({
+                message:"current password is incorrect"
+            })
+        }
+        
+        user.password = newPassword;
+        await user.save();
 
+        res.cookie('jwt','',{
+            httpOnly:true,
+            expires: new Date(0)
+        })
+        res.status(200).json({
+            message:"password changed successfully"
+        })
+    } catch (error) {
+        res.status(500).json({
+            message:"internal server error",
+            error:error.message
+        })
+    }
+}
 
 // controller to delete a user
-exports .deleteUser = async(req,res)=>{
+exports.deleteUser = async(req,res)=>{
     try {
         const userId =req.user._id;
         await User.findByIdAndDelete(userId);

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import logo from '../assets/logo1.webp'
+import logo from '/public/logo2.png'
 import { FiLogOut } from 'react-icons/fi'
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import api from '../api/axios.js';
@@ -13,6 +13,8 @@ export default function Slidebar({ children }) {
   const [expand, setExpand] = useState(true);
   const {logOut,user} = useAuth();
   const navigate = useNavigate();
+  const imgAvater = user?.avatar || null;
+  const default_avatar = user?.name.split(" ").map(word => word[0].toUpperCase()).join("")
  
   const handleLogout = async() => {
     // Clear user session or authentication tokens here
@@ -27,10 +29,10 @@ export default function Slidebar({ children }) {
           {/* Header */}
           <div className="p-4 flex justify-between items-center border-b h-16 overflow-hidden">
             <img onClick={()=>navigate('/')} src={logo} alt="air-write-logo"
-              className={`cursor-pointer transition-all duration-300 ${expand ? 'w-32' : 'w-0'}`} />
+              className={`cursor-pointer scale-140 transition-all duration-300 ${expand ? 'w-32' : 'w-0'}`} />
             <button
               onClick={() => setExpand(!expand)}
-              className='w-8 h-8 flex justify-center items-center rounded-md hover:bg-indigo-500 hover:text-white transition'>
+              className='w-9 h-9 flex justify-center items-center rounded-md bg-gray-200 hover:bg-indigo-500 hover:text-white transition'>
               {expand ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
             </button>
           </div>
@@ -42,7 +44,8 @@ export default function Slidebar({ children }) {
           {/* Footer */}
           <div className='p-3 border-t cursor-pointer'>
             <div className={`flex w-full ${expand ? 'gap-3' : 'justify-center'}`}>
-              <img src={user?.avatar || logo} onClick={()=>navigate('/dashboard/settings')} alt="user_avatar" className='rounded-md h-10 w-10' />
+             {imgAvater && <img src={`http://localhost:5000${imgAvater }`} onClick={()=>navigate('/dashboard/settings')} alt="user_avatar" className='rounded-md h-10 w-10 ' /> 
+             || (<div className='h-10 w-10 text-indigo-700 rounded-md bg-indigo-200 flex justify-center font-bold items-center'>{default_avatar}</div>)}
               {expand && (
                 <div className='leading-4'>
                   <h4 className='font-semibold'>{user?.name ||"Joy Boss"}</h4>

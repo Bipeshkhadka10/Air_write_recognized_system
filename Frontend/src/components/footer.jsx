@@ -9,8 +9,8 @@ export default function Footer() {
           <div className="footer-warpper">
             <div className="footer-left">
               <div className='footer-logo' onClick={()=>{navigate('/')}}>
-                <img src="/logo.jpg" alt="Air_write_system" title='Air-write' />
-                <h2 className='logo-name'>AirWrite</h2>
+                <img src="/logo2.png" alt="Air_write_system" title='Air-write' className="w-40 scale-100" />
+                {/* <h2 className='logo-name font-semibold text-[1.3rem] text-blue-900'>AirWrite</h2> */}
               </div>
               <div className="footer-text">
                 <p>Transform your hand gestures into digital text <br /> with our AI-powered air writing recognition <br /> system</p>
