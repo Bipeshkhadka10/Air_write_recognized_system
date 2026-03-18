@@ -2,3 +2,29 @@
     margin: 0;
     padding: 0;
 } */
+/* LIGHT THEME (default) */
+body.light {
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --card-bg: #ffffff;
+  --border-color: #e5e7eb;
+  --primary-color: #4a6cf7;
+  --secondary-text: #6b7280;
+}
+
+/* DARK THEME */
+body.dark {
+  --bg-color: #0f172a;
+  --text-color: #f1f5f9;
+  --card-bg: #1e293b;
+  --border-color: #334155;
+  --primary-color: #4a6cf7;
+  --secondary-text: #94a3b8;
+}
+
+/* APPLY GLOBAL */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}   

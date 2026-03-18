@@ -90,37 +90,22 @@ export default function ModelStatus() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* HEADER */}
-      <div className="bg-white border-b border-slate-200">
-        <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-slate-900">
-              Model Status
-            </h1>
-            <p className="text-sm text-slate-500">
-              AI model performance and system health
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4">
-            {/* Search */}
-            <div className="relative">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input
-                className="h-11 w-80 rounded-2xl border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none focus:ring-2 focus:ring-blue-200"
-                placeholder="Search..."
-              />
-            </div>
-
-            {/* Bell with dot */}
-            <button className="relative rounded-xl p-2 hover:bg-slate-100">
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-blue-500" />
-              <BellIcon className="h-5 w-5 text-slate-700" />
-            </button>
-
-            <User className="h-5 w-5 text-slate-700 cursor-pointer" />
-          </div>
-        </div>
-      </div>
+      <nav className='h-16 px-4 mb-3 w-full border-b flex items-center justify-between ' >
+                    <div className='flex flex-col text-left' >
+                        <span className='text-2xl font-medium'>Model Status</span>
+                        <h4 className='text-gray-700 text-sm w-full'>AI model performance and system health</h4>
+                    </div>
+                    {/* search */}
+                    <div className='flex justify-between items-center'>
+                        <div className='relative flex  items-center'>
+                        <FiSearch className='absolute left-1' size={16} />
+                        <input type="text" placeholder='search...' className='text-sm border h-8 pl-8 w-23 rounded-md md:w-auto'/>
+                    </div>
+                    <User onClick={()=>{navigate('/dashboard/settings')}} size={20} className='text-gray-800 ml-4 cursor-pointer' />
+                    
+                    </div>
+                  </nav>
+            
 
       {/* CONTENT */}
       <div className="mx-auto max-w-7xl px-6 py-6">
