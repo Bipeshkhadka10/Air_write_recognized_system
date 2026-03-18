@@ -11,10 +11,12 @@ const sidebarContext = createContext();
 
 export default function Slidebar({ children }) {
   const [expand, setExpand] = useState(true);
-  const {logOut,user} = useAuth();
+  const {logOut,user,playSound} = useAuth();
   const navigate = useNavigate();
   const imgAvater = user?.avatar || null;
-  const default_avatar = user?.name.split(" ").map(word => word[0].toUpperCase()).join("")
+const default_avatar = user?.name
+  ? user.name.split(" ").map(word => word[0] ? word[0].toUpperCase() : "").join("")
+  : "JD";
  
   const handleLogout = async() => {
     // Clear user session or authentication tokens here

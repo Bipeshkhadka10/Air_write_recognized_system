@@ -311,11 +311,14 @@ a{
   padding: 20px;
   padding-left: 30px;
   position: relative;
+  box-sizing: border-box;
 }
 .content-left .content-warp h1{
   font-size: 4rem;
+  font-weight: 600;
 }
 .content-left-text p{
+  font-size: 1.1rem;
   font-family: sans-serif;
   width: 90%;
   color:#666;
@@ -341,8 +344,6 @@ a{
 
 .primary{
   background: #4a6cf7;
-  
-
 }
 .primary:hover{
   transform: scale(1.05);
@@ -351,17 +352,6 @@ a{
 .secondary:hover{
   background: #757373b6;
   opacity: 1;
-}
-
-.content-left-efficiency{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    box-sizing: content-box;
-    position: absolute;
-    bottom: 10px;
-    float: left;
-  
 }
 
 .warp-eff{
@@ -389,7 +379,47 @@ a{
   
   
 }
+@media(max-width:768px){
+  .content-left .content-warp h1{
+    font-size: 2.4rem;
+    font-weight: 600;
 
+}
+.content-left-text p{
+  font-size: 14px;
+  font-family: sans-serif;
+  width: 90%;
+  color:#666;
+ 
+}
+.content-left-efficiency{
+  width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    box-sizing: content-box;
+    position: absolute;
+    bottom: 0;
+    float: left;
+  
+}
+.warp-eff span{
+  font-size: 18px;
+  font-family: sans-serif;
+  font-weight: 700;color: #4a6cf7;
+}
+.content-left-btn .btns{
+  height: 2rem;
+  width: 40%;
+  border: 1px solid #4a6cf7;
+  border-radius: 7px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .3s ease;
+  font-size: 14px;
+}
+
+}
 /* features styling css */
 
 .content-wapper{

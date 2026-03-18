@@ -4,6 +4,7 @@ import { Bell, Shield, User, Camera, Download, Search } from "lucide-react";
 import ProfileTab from "./profile";
 import api from "../api/axios.js";
 import jsPDF from "jspdf";
+
 import { useAuth } from "../api/authContex.jsx";
 export default function Settings() {
   const [activeTab, setActiveTab] = useState("General");
@@ -81,7 +82,7 @@ export default function Settings() {
 
 export function Card({ children }) {
   return (
-    <div className="bg-white border rounded-3xl p-6 shadow-md w-3xl ml-16">{children}</div>
+    <div className="bg-white border rounded-3xl p-6 shadow-md w-2xl ml-16">{children}</div>
   );
 }
 
@@ -133,7 +134,7 @@ function GeneralTab({
   theme,
   setTheme,
 }) {
-  const {user,setUser} = useAuth()
+  const {user,setUser,playSound} = useAuth()
   const [note, setNote] = useState([]);
  const fetchImageAsBase64 = async (url) => {
   if (!url) return null;
@@ -163,8 +164,10 @@ const fetchUserNotes = async()=>{
     fetchUserNotes();
   },[])
 
+ 
 
   const downloadData = async (user)=>{
+  playSound()
    const doc = new jsPDF();
        //  Add avatar image if exists
     if (user.avatar) {
@@ -196,6 +199,7 @@ const fetchUserNotes = async()=>{
   }
 
    const handleDeleteAccount =async()=>{
+    playSound()
     if(window.confirm("Are you sure you want to delete your account? This action cannot be undone.")){
       const response = await api.delete('/user/profile/delete',{withCredentials:true})
       if(response.data){
@@ -208,21 +212,13 @@ const fetchUserNotes = async()=>{
     <div className="space-y-6">
       {/* top two cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Notifications */}
+        {/* system notifications */}
         <Card>
           <SectionTitle
             icon={<Bell className="w-5 h-5" />}
-            title="Notifications"
+            title="System Notifications"
             subtitle="Manage notification preferences"
           />
-
-          <ToggleRow
-            title="Push Notifications"
-            desc="Receive browser notifications"
-            value={pushNoti}
-            onChange={setPushNoti}
-          />
-          <div className="border-t" />
 
           <ToggleRow
             title="Sound Effects"
@@ -239,7 +235,7 @@ const fetchUserNotes = async()=>{
             onChange={setAutoSave}
           />
         </Card>
-
+        <br />
         {/* Appearance */}
         <Card>
           <SectionTitle
@@ -265,14 +261,6 @@ const fetchUserNotes = async()=>{
               </button>
             ))}
           </div>
-
-          <p className="text-sm font-medium mb-2">Language</p>
-          <select className="w-full border rounded-2xl px-4 py-3 bg-white outline-none focus:ring-2 focus:ring-indigo-200">
-            <option>English (US)</option>
-            <option>English (UK)</option>
-            <option>Nepali</option>
-            <option>Korean</option>
-          </select>
         </Card>
       </div>
 

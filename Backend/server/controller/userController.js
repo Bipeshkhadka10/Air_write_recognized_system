@@ -1,6 +1,7 @@
 const User = require('../model/user');
 require('dotenv').config();
-const asyncHandler = require('express-async-handler');
+const sendEmail = require('../utils/nodeMailer')
+const {verifyEmailTemplate,welcomeEmail,resetPasswordTemplate} = require('../utils/emailTemplets')
 const generateToken = require('../utils/jwtToken');
 
 // Controller to get all users
@@ -56,26 +57,46 @@ exports.createUser =async(req,res)=>{
         password,
         avatar,
         bio
-       })
-        const response = await newUser.save();
-        if(response){
-            // jwt token generation
-            generateToken(res, response._id);
-            const userData = response.toObject();       // to remove password from response so it's not visible to client
-            delete userData.password;
-            res.status(201).json({
-                message:"user created successfully",
-                data:userData,
+       });
+
+       // ✅ Generate verification code
+        const code = newUser.generateVerifyCode();
+
+//         const response = await newUser.save();
+//         if(response){
+//             // jwt token generation
+//             generateToken(res, response._id);
+//             const userData = response.toObject();       // to remove password from response so it's not visible to client
+//             delete userData.password;
+//             res.status(201).json({
+//                 message:"user created successfully",
+//                 data:userData,
                 
-            })
-        }
-       } catch (error) {
-            res.status(500).json({error:"internal server error",
-            error:error.message
-        })
-       } 
+//             })
+//         }
+//        } catch (error) {
+//             res.status(500).json({error:"internal server error",
+//             error:error.message
+//         })
+//        } 
        
-}
+// }    
+
+
+       await newUser.save();
+    
+    //  Send verification email
+    await sendEmail(email, verifyEmailTemplate(name, code));
+    //  Send welcome email now
+    await sendEmail(user.email, welcomeEmail(user.name));
+    res.status(201).json({
+      message: "User created. Please verify your email",
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 // controller to get user profile
 exports.getProfile= async(req,res)=>{
@@ -237,6 +258,11 @@ exports.loginUser =async(req,res)=>{
                         message:"user not found with this email"
                     })
                 }
+                if (!user.isVerified) {
+                    return res.status(401).json({
+                        message: "Please verify your email first",
+                    });
+                }
                 
                 const isPasswordMatch = await user.comparePasswords(password);
                 if(!isPasswordMatch || !user){
@@ -278,3 +304,82 @@ exports.logOut = async(req,res)=>{
         res.status(500).json({error:"internal server error"})
     }
 }
+
+
+
+
+
+exports.verifyCode = async (req, res) => {
+  const {verifyCode} = req.body;
+
+  const user = await User.findOne({
+    verifyCode:String(verifyCode),
+    verifyCodeExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return res.status(400).json({ message: "Invalid or expired code" });
+  }
+
+  user.isVerified = true;
+  user.verifyCode = null;
+  user.verifyCodeExpire = null;
+
+  await user.save();
+
+  //  JWT generated AFTER verification
+  generateToken(res, user._id);
+
+  res.status(200).json({
+    message: "Email verified successfully",
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+    },
+  });
+};
+
+exports.handleForgetPassword = async (req, res) => {
+  try {
+    const { email } = req.body; // take email
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const code= user.generateVerifyCode();
+    await user.save();
+
+    // Send verification email
+    await sendEmail(email, resetPasswordTemplate(user.name, code));
+
+    res.json({ message: "Reset code sent" });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { code, newPassword } = req.body;
+
+  const user = await User.findOne({
+    verifyCode: code,
+    verifyCodeExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return res.status(400).json({ message: "Invalid or expired code" });
+  }
+
+  user.password = newPassword;
+  user.verifyCode = null;
+  user.verifyCodeExpire = null;
+
+  await user.save();
+
+  res.json({ message: "Password reset successful" });
+};

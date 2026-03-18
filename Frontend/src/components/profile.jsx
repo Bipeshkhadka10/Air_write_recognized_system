@@ -7,10 +7,12 @@ import { useAuth } from '../api/authContex.jsx';
  
 
 export default function ProfileTab() {
-  const {user, setUser} = useAuth();
+  const {user, setUser,playSound} = useAuth();
   // console.log("user data in profile tab",user);
   // setting default avatar by user name
-  const default_avatar = user?.name.split(" ").map(word => word[0].toUpperCase()).join("");
+  const default_avatar = user?.name
+  ? user.name.split(" ").map(word => word[0] ? word[0].toUpperCase() : "").join("")
+  : "JD";
 
   // const getUserData = async()=>{
   //   try{
@@ -32,6 +34,7 @@ export default function ProfileTab() {
     
   //  handling image 
   const handleImage = (e)=>{
+  
     const file = e.target.files[0];
     const allowType = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
     console.log("selected file",file);
@@ -66,7 +69,7 @@ export default function ProfileTab() {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       if(response.data && response.data.data){
-        console.log("profile updated successfully",response.data)
+        alert("profile updated successfully")
         setUser(response.data.data);
         setImage(response.data.data.avatar);
       }
@@ -92,7 +95,7 @@ export default function ProfileTab() {
         <div>
           <div className="px-4 py-2 rounded-xl border bg-white hover:bg-gray-50">
            <input type="file" name='avatar' className="hidden" id="avatar-upload" accept='image/png, image/jpeg, image/webp, image/gif'  onChange={handleImage} />
-           <label htmlFor="avatar-upload" className="cursor-pointer">Change Avatar</label>
+           <label htmlFor="avatar-upload"onClick={()=>playSound()} className="cursor-pointer">Change Avatar</label>
           </div>
           <p className="text-xs text-gray-500 mt-2">
             JPG, PNG or GIF. Max 2MB.
@@ -134,7 +137,7 @@ export default function ProfileTab() {
         </div>
       </div>
 
-      <button type='submit' className="mt-8 px-6 py-3 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700">
+      <button type='submit'onClick={()=>playSound()} className="mt-8 px-6 py-3 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700">
         Save Changes
       </button>
       </form>
