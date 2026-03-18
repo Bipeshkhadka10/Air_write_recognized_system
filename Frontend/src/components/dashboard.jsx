@@ -15,7 +15,7 @@ export default function Dashboard({expand}) {
     console.log(noteLimits);
     const navigate = useNavigate();
 
-    const {user,setUser} = useAuth();
+    const {user,setUser,playSound} = useAuth();
     
     useEffect(()=>{
         const getRecentNotes= async()=>{

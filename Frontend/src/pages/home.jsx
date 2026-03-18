@@ -9,8 +9,8 @@ function Home(){
     const Navigate = useNavigate();
     return(
         <>
-        <div className="container">
-            <div className="content-left" >
+        <div className="w-full h-screen flex justify-around px-10 pt-2 gap-3">
+            <div className="content-left position-relative box-border" >
                 <div className="content-warp" style={{marginTop:"10vh"}}>
                     <h1 style={{margin:'0'}}>Write in the Air</h1>
                     <h1 style={{margin:'0', color:"#4a6cf7"}}>Capture it Digitally</h1>
@@ -20,11 +20,11 @@ function Home(){
                         characters ad you write in the air.
                     </p>
                 </div>
-                <div className="content-left-btn">
-                    <button className="btns primary" onClick={()=>{Navigate('/Signup')}}>Get Started Free</button>
-                    <button className="btns secondary" onClick={()=>{Navigate('/dashboard')}}><FiPlay style={{paddingRight:'2px'}} /> PlayTry Demo</button>
+                <div className="content-left-btn w-full flex gap-5">
+                    <button className="btns primary font-semibold text-white" onClick={()=>{Navigate('/Signup')}}>Get Started Free</button>
+                    <button className="btns secondary flex justify-center items-center font-semibold" onClick={()=>{Navigate('/dashboard')}}><FiPlay style={{paddingRight:'2px'}} /> PlayTry Demo</button>
                 </div>
-                <div className="content-left-efficiency">
+                <div className="content-left-efficiency w-full flex gap-10 absolute bottom-10 justify-center text-center right-2">
                     <div className="warp-eff">
                         <span className="sys-efficiency">98%</span>
                         <p>Accuracy</p>

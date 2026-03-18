@@ -129,10 +129,10 @@ export default function ChangePassword() {
         </form>
         <hr className="my-6 border-gray-300" />
         <div className="text-center">
-            <button className="text-sm text-red-600 hover:underline">Forgot your current password?</button>
+            <button onClick={()=>window.location.href = '/forgot-password'} className="text-sm text-red-600 hover:underline">Forgot your current password?</button>
         </div>
         <div className="text-center mt-4">
-            <button className="text-sm text-gray-600 hover:underline">Back to Settings</button>
+            <button onClick={()=>window.location.href = '/dashboard/settings'} className="text-sm text-gray-600 hover:underline">Back to Settings</button>
         </div>
     </div>
     </div>

@@ -15,6 +15,9 @@ import ModelStatus from './modelStatus';
 import Settings from './settings';
 import ProtectedRoute from './protectedRoute';
 import ChangePassword from './changePassword';
+import ResetPassword from '../pages/resetPassword';
+import VerifyCode from '../pages/verifyCode';
+import CheckEmail from '../pages/checkEmail';
     const router = createBrowserRouter([
         {
             path:'/',
@@ -27,6 +30,9 @@ import ChangePassword from './changePassword';
                 {path:'signin', element:<Signin/>},
                 {path:'signup', element:<Signup/>},
                 {path:'forgot-password', element:<ForgetPassword/>},
+                {path:'reset-password',element:<ResetPassword/>},
+                {path:'verify-code',element:<VerifyCode/>},
+                {path:'Check-email',element:<CheckEmail/>}
             ]
         },
         {   

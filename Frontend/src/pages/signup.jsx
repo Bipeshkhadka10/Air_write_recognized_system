@@ -99,7 +99,7 @@ function Signup(){
     useEffect(()=>{
         if(data?.success){
             // redirect to dashboard or signin page
-            navigate('/signin');
+            navigate('/verify-code');
             console.log('signup successfully');
         }
     },[data])
