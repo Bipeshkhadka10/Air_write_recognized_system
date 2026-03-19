@@ -39,7 +39,8 @@ async function handleFormSubmit(prev, formData) {
         error.email = "Email is required";
     }else if(!emailRegex.test(email)){
         error.email = "Invalid email format";
-    }else if(!password){
+    }
+    if(!password){
         error.password = "Password is required";
     }else if(password.length < 8 || password.length >20){
         error.password = "Password must be between 8 and 20 characters";
@@ -63,17 +64,25 @@ async function handleFormSubmit(prev, formData) {
 
     // sending data to server
     try {
-        const response = await api.post('/user/register',{name,email,password});
-        console.log(response);
-        return({success:true,
-            message:"successfuly signup"
-        })
+        await api.post('/user/register', { name, email, password });
+        localStorage.setItem("signupData", JSON.stringify({ name, email, password }));
+        window.location.href = '/verify-code';
+        return {
+            success:true
+        }
+        // const response = await api.post('/user/register',{name,email,password});
+        // console.log(response);
+        // window.location.href = '/verify-code';
+        // return({success:true,
+        //     message:"successfuly signup"
+        // })
+        // alert("successfully sinup")
     } catch (error) {
         if(error.response?.status === 409){
-            return({
-                success:false,
-                error:{email:"Email already exists. Please use a different email."}
-            })
+            return {
+            success:false,
+            error:"Failed to send OTP"
+        }
         }
         return({
             success:false,
@@ -99,8 +108,7 @@ function Signup(){
     useEffect(()=>{
         if(data?.success){
             // redirect to dashboard or signin page
-            navigate('/verify-code');
-            console.log('signup successfully');
+            
         }
     },[data])
     return(

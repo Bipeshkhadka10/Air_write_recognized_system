@@ -43,12 +43,12 @@ exports.createUser =async(req,res)=>{
         const avatar = req.file?`/uploads/${req.file.filename}`:null;
         
         if(!name || !email || !password ){
-            res.status(400).json({message:"name,email and password are required"})
+            return res.status(400).json({message:"name,email and password are required"})
         }
 
        // check if user already exists
        if(await User.findOne({email:email})){
-            res.status(409).json({message:"user with this email already exists"})
+            return res.status(409).json({message:"user with this email already exists"})
         };
 
        const newUser  = new User({
@@ -88,13 +88,13 @@ exports.createUser =async(req,res)=>{
     //  Send verification email
     await sendEmail(email, verifyEmailTemplate(name, code));
     //  Send welcome email now
-    await sendEmail(user.email, welcomeEmail(user.name));
-    res.status(201).json({
+    // await sendEmail(newUser.email, welcomeEmail(newUser.name));
+    return res.status(201).json({
       message: "User created. Please verify your email",
     });
 
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };
 
@@ -310,10 +310,11 @@ exports.logOut = async(req,res)=>{
 
 
 exports.verifyCode = async (req, res) => {
-  const {verifyCode} = req.body;
+  const { email, otp } = req.body;
 
   const user = await User.findOne({
-    verifyCode:String(verifyCode),
+    email: email,
+    verifyCode: String(otp),
     verifyCodeExpire: { $gt: Date.now() },
   });
 
@@ -327,10 +328,11 @@ exports.verifyCode = async (req, res) => {
 
   await user.save();
 
-  //  JWT generated AFTER verification
   generateToken(res, user._id);
 
-  res.status(200).json({
+  await sendEmail(user.email, welcomeEmail(user.name));
+
+  return res.status(200).json({
     message: "Email verified successfully",
     user: {
       id: user._id,
@@ -382,4 +384,48 @@ exports.resetPassword = async (req, res) => {
   await user.save();
 
   res.json({ message: "Password reset successful" });
+};
+
+
+
+exports.resendCode = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        message: "Email is required",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({
+        message: "User already verified",
+      });
+    }
+
+    const code = user.generateVerifyCode();
+
+    await user.save();
+
+    await sendEmail(email, verifyEmailTemplate(user.name, code));
+
+    return res.status(200).json({
+      message: "Verification code resent successfully",
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
 };

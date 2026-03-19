@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../model/user');
-const{getAllUsers, createUser,updateUser,deleteUser,loginUser, logOut, getProfile, changePassword,handleForgetPassword,resetPassword, verifyCode}= require('../controller/userController')
+const{getAllUsers, createUser,updateUser,deleteUser,loginUser, logOut, getProfile, changePassword,handleForgetPassword,resetPassword, verifyCode,resendCode}= require('../controller/userController')
 const {authValidation} = require('../middleware/authMiddleWare')
 const upload = require('../middleware/multerMiddleware')
 // Route to get all users
@@ -27,5 +27,6 @@ router.post('/user/logout',logOut)
 router.post("/auth/verify-code", verifyCode);
 router.post("/auth/forgot-password", handleForgetPassword);
 router.post("/auth/reset-password", resetPassword);
+router.post("/auth/resend-code", resendCode);
 
 module.exports = router;
