@@ -1,3 +1,6 @@
 node_modules
 .env
 errorMiddleware.js
+package-lock.json
+package.json
+README.md
