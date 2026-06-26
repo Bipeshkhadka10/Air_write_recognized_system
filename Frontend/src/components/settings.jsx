@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { FiSearch,FiZap } from 'react-icons/fi'
 import { Bell, Shield, User, Camera, Download, Search } from "lucide-react";
 import ProfileTab from "./profile";
@@ -7,12 +8,43 @@ import jsPDF from "jspdf";
 
 import { useAuth } from "../api/authContex.jsx";
 export default function Settings() {
+  const navigate = useNavigate();  // FIX: was missing — caused crash on User icon click
   const [activeTab, setActiveTab] = useState("General");
   const [pushNoti, setPushNoti] = useState(true);
   const [soundEffects, setSoundEffects] = useState(false);
   const [autoSave, setAutoSave] = useState(true);
   const [theme, setTheme] = useState("Dark");
   const {user,setUser,loading,setLoading} = useAuth();
+
+  // FIX: persist sound & theme preferences so they survive page reloads
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('aw_theme');
+    const savedSound = localStorage.getItem('aw_sound');
+    if (savedTheme) setTheme(savedTheme);
+    if (savedSound !== null) setSoundEffects(savedSound === 'true');
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('aw_theme', theme);
+  }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem('aw_sound', String(soundEffects));
+  }, [soundEffects]);
+
+  // FIX: apply theme to <html> whenever it changes
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'Dark') {
+      root.classList.add('dark');
+    } else if (theme === 'Light') {
+      root.classList.remove('dark');
+    } else {
+      // System: follow OS preference
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.classList.toggle('dark', prefersDark);
+    }
+  }, [theme]);
 
   const tabs = ["Profile", "General"];
 
@@ -134,7 +166,9 @@ function GeneralTab({
   theme,
   setTheme,
 }) {
-  const {user,setUser,playSound} = useAuth()
+  const {user,setUser,playSound: _playSound} = useAuth()
+  // FIX: only emit sound when sound effects are enabled
+  const playSound = () => { if (soundEffects) _playSound(); };
   const [note, setNote] = useState([]);
  const fetchImageAsBase64 = async (url) => {
   if (!url) return null;
