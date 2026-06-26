@@ -59,7 +59,7 @@ exports.createUser =async(req,res)=>{
         bio
        });
 
-       // ✅ Generate verification code
+       // Generate verification code
         const code = newUser.generateVerifyCode();
 
 //         const response = await newUser.save();

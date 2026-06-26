@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const settingSchema = new mongoose.Schema({
     userId:{
-        type:mongoose.Schema.types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:'User'
     },
     gestureSensitivity:{

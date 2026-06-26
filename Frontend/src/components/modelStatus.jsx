@@ -1,6 +1,7 @@
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 import { User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   ResponsiveContainer,
   LineChart,
@@ -15,6 +16,7 @@ import {
 } from "recharts";
 
 export default function ModelStatus() {
+  const navigate = useNavigate();
   // Top cards
   const metrics = [
     {

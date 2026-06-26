@@ -1,6 +1,6 @@
-const Setting = requrie('../model/setting');
+const Setting = require('../model/setting');
 
-// controller logic for settings can be added here
+
 exports.editSettings = async(req,res)=>{
     try {
         const userId = req.user.userId;
