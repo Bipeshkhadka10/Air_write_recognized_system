@@ -1,4 +1,4 @@
-import {createBrowserRouter,RouterProvider} from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import Home from '../pages/home';
 import App from '../App';
 import Signup from '../pages/signup';
@@ -18,35 +18,45 @@ import ChangePassword from './changePassword';
 import ResetPassword from '../pages/resetPassword';
 import VerifyCode from '../pages/verifyCode';
 import CheckEmail from '../pages/checkEmail';
-    const router = createBrowserRouter([
-        {
-            path:'/',
-            element:<App />,
-            children:[
-                {index:true, element:<Home/> },
-                {path:'features', element:<Features/>},
-                {path:'about', element:<About/>},
-                {path:'documentation', element:<Documentation/>},
-                {path:'signin', element:<Signin/>},
-                {path:'signup', element:<Signup/>},
-                {path:'forgot-password', element:<ForgetPassword/>},
-                {path:'reset-password',element:<ResetPassword/>},
-                {path:'verify-code',element:<VerifyCode/>},
-                {path:'Check-email',element:<CheckEmail/>}
-            ]
-        },
-        {   
-            path:'/dashboard',
-            element:<ProtectedRoute><UserDashbord /></ProtectedRoute>,
-            children:[
-              {index:true ,element:<Dashboard/> },
-              {path:'livewriting', element:<LiveWriting/> },
-              {path:'notes', element:<Notes/> },
-              {path:'modelstatus', element:<ModelStatus/> },
-              {path:'settings', element:<Settings/> },
-              {path:'change-password', element:<ChangePassword/> },
-            ]
-        }
-    ])
+import AuthSuccess from '../pages/authSucess';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: 'features', element: <Features /> },
+      { path: 'about', element: <About /> },
+      { path: 'documentation', element: <Documentation /> },
+      { path: 'signin', element: <Signin /> },
+      { path: 'signup', element: <Signup /> },
+
+      // Google OAuth Success Route
+      { path: 'auth-success', element: <AuthSuccess /> },
+
+      { path: 'forgot-password', element: <ForgetPassword /> },
+      { path: 'reset-password', element: <ResetPassword /> },
+      { path: 'verify-code', element: <VerifyCode /> },
+      { path: 'Check-email', element: <CheckEmail /> },
+    ],
+  },
+  {
+    path: '/dashboard',
+    element: (
+      <ProtectedRoute>
+        <UserDashbord />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: 'livewriting', element: <LiveWriting /> },
+      { path: 'notes', element: <Notes /> },
+      { path: 'modelstatus', element: <ModelStatus /> },
+      { path: 'settings', element: <Settings /> },
+      { path: 'change-password', element: <ChangePassword /> },
+    ],
+  },
+]);
 
 export default router;

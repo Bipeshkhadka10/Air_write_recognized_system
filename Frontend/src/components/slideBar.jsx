@@ -1,76 +1,107 @@
-import React, { createContext, useContext, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
-import logo from '/public/logo2.png'
-import { FiLogOut } from 'react-icons/fi'
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import api from '../api/axios.js';
-import { useAuth } from '../api/authContex.jsx'
+import React, { createContext, useContext, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import logo from "/public/logo2.png";
+import { FiLogOut } from "react-icons/fi";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import api from "../api/axios.js";
+import { useAuth } from "../api/authContex.jsx";
 const sidebarContext = createContext();
-
-
 
 export default function Slidebar({ children }) {
   const [expand, setExpand] = useState(true);
-  const {logOut,user,playSound} = useAuth();
+  const { logOut, user, playSound } = useAuth();
   const navigate = useNavigate();
   const imgAvater = user?.avatar || null;
-const default_avatar = user?.name
-  ? user.name.split(" ").map(word => word[0] ? word[0].toUpperCase() : "").join("")
-  : "JD";
- 
-  const handleLogout = async() => {
-    // Clear user session or authentication tokens here
-   await logOut();
-    window.location.href = '/signin';
-  }
-  return (
-    <div className='flex h-full w-full'>
-      <aside className={`h-screen transition-all duration-300 ${expand ? 'w-64' : 'w-16'}`}>
-        <nav className='h-full flex flex-col bg-white shadow-md'>
+  const default_avatar = user?.name
+    ? user.name
+        .split(" ")
+        .map((word) => (word[0] ? word[0].toUpperCase() : ""))
+        .join("")
+    : "JD";
 
+  const handleLogout = async () => {
+    // Clear user session or authentication tokens here
+    await logOut();
+    window.location.href = "/signin";
+  };
+  return (
+    <div className="flex h-full w-full">
+      <aside
+        className={`h-screen transition-all duration-300 ${expand ? "w-64" : "w-16"}`}
+      >
+        <nav className="h-full flex flex-col bg-white shadow-md">
           {/* Header */}
           <div className="p-4 flex justify-between items-center border-b h-16 overflow-hidden">
-            <img onClick={()=>navigate('/')} src={logo} alt="air-write-logo"
-              className={`cursor-pointer scale-140 transition-all duration-300 ${expand ? 'w-32' : 'w-0'}`} />
+            <img
+              onClick={() => navigate("/")}
+              src={logo}
+              alt="air-write-logo"
+              className={`cursor-pointer scale-140 transition-all duration-300 ${expand ? "w-32" : "w-0"}`}
+            />
             <button
               onClick={() => setExpand(!expand)}
-              className='w-9 h-9 flex justify-center items-center rounded-md bg-gray-200 hover:bg-indigo-500 hover:text-white transition'>
+              className="w-9 h-9 flex justify-center items-center rounded-md bg-gray-200 hover:bg-indigo-500 hover:text-white transition"
+            >
               {expand ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
             </button>
           </div>
 
           <sidebarContext.Provider value={{ expand }}>
-            <ul className='flex-1 mt-5'>{children}</ul>
+            <ul className="flex-1 mt-5">{children}</ul>
           </sidebarContext.Provider>
 
           {/* Footer */}
-          <div className='p-3 border-t cursor-pointer'>
-            <div className={`flex w-full ${expand ? 'gap-3' : 'justify-center'}`}>
-             {imgAvater && <img src={`http://localhost:5000${imgAvater }`} onClick={()=>navigate('/dashboard/settings')} alt="user_avatar" className='rounded-md h-10 w-10 ' /> 
-             || (<div className='h-10 w-10 text-indigo-700 rounded-md bg-indigo-200 flex justify-center font-bold items-center'>{default_avatar}</div>)}
+          <div className="p-3 border-t cursor-pointer">
+            <div
+              className={`flex w-full ${expand ? "gap-3" : "justify-center"}`}
+            >
+              {/* {imgAvater && <img src={`http://localhost:5000${imgAvater }`} onClick={()=>navigate('/dashboard/settings')} alt="user_avatar" className='rounded-md h-10 w-10 ' /> 
+             || (<div className='h-10 w-10 text-indigo-700 rounded-md bg-indigo-200 flex justify-center font-bold items-center'>{default_avatar}</div>)} */}
+              {imgAvater ? (
+                <img
+                  src={
+                    imgAvater.startsWith("http")
+                      ? imgAvater
+                      : `http://localhost:5000${imgAvater}`
+                  }
+                  onClick={() => navigate("/dashboard/settings")}
+                  alt="user_avatar"
+                  className="rounded-md h-10 w-10 object-cover"
+                />
+              ) : (
+                <div className="h-10 w-10 text-indigo-700 rounded-md bg-indigo-200 flex justify-center items-center font-bold">
+                  {default_avatar}
+                </div>
+              )}
               {expand && (
-                <div className='leading-4'>
-                  <h4 className='font-semibold'>{user?.name ||"Joy Boss"}</h4>
-                  <span className='text-xs text-gray-600'>{user?.email || "No email available"}</span>
+                <div className="leading-4">
+                  <h4 className="font-semibold">{user?.name || "Joy Boss"}</h4>
+                  <span className="text-xs text-gray-600">
+                    {user?.email || "No email available"}
+                  </span>
                 </div>
               )}
             </div>
 
-            <div onClick={handleLogout} className='flex justify-center gap-2 items-center h-10 bg-indigo-600 text-white rounded mt-3 cursor-pointer'>
+            <div
+              onClick={handleLogout}
+              className="flex justify-center gap-2 items-center h-10 bg-indigo-600 text-white rounded mt-3 cursor-pointer"
+            >
               <FiLogOut size={18} />
-              {expand && <button className='font-semibold text-sm'>Signout</button>}
+              {expand && (
+                <button className="font-semibold text-sm">Signout</button>
+              )}
             </div>
           </div>
-
         </nav>
       </aside>
 
       {/* Page Content */}
-      <div className='flex-1 h-screen overflow-auto bg-gray-50'>
+      <div className="flex-1 h-screen overflow-auto bg-gray-50">
         <Outlet />
       </div>
     </div>
-  )
+  );
 }
 
 export function SlidebarItems({ icon, text, active, clicked }) {
@@ -81,11 +112,11 @@ export function SlidebarItems({ icon, text, active, clicked }) {
     if (clicked) clicked();
 
     const routes = {
-      'Dashboard': '/dashboard',
-      'Live Writing': '/dashboard/livewriting',
-      'Notes': '/dashboard/notes',
-      'Model Status': '/dashboard/modelstatus',
-      'Settings': '/dashboard/settings'
+      Dashboard: "/dashboard",
+      "Live Writing": "/dashboard/livewriting",
+      Notes: "/dashboard/notes",
+      "Model Status": "/dashboard/modelstatus",
+      Settings: "/dashboard/settings",
     };
 
     navigate(routes[text]);
@@ -95,20 +126,26 @@ export function SlidebarItems({ icon, text, active, clicked }) {
     <li
       onClick={handleClick}
       className={`h-11 relative flex items-center px-4 rounded-md transition-all duration-300 cursor-pointer group
-      ${active ? "bg-gradient-to-tr from-indigo-200 to-indigo-600 text-indigo-950" : "hover:bg-sky-200"}`}>
-
-      <div className={`flex items-center gap-3 w-full transition-all duration-300 ${expand ? '' : 'justify-center'}`}>
+      ${active ? "bg-gradient-to-tr from-indigo-200 to-indigo-600 text-indigo-950" : "hover:bg-sky-200"}`}
+    >
+      <div
+        className={`flex items-center gap-3 w-full transition-all duration-300 ${expand ? "" : "justify-center"}`}
+      >
         <span className="w-5 h-5 flex items-center justify-center">{icon}</span>
 
-        <span className={`text-sm font-medium transition-all duration-300
-          ${expand ? "opacity-100 ml-0" : "opacity-0 -ml-2 w-0 overflow-hidden"}`}>
+        <span
+          className={`text-sm font-medium transition-all duration-300
+          ${expand ? "opacity-100 ml-0" : "opacity-0 -ml-2 w-0 overflow-hidden"}`}
+        >
           {text}
         </span>
       </div>
 
       {active && (
-        <div className={`absolute h-1.5 w-1.5 rounded-full bg-indigo-700 right-4 ${expand ? '' : 'top-2'}`} />
+        <div
+          className={`absolute h-1.5 w-1.5 rounded-full bg-indigo-700 right-4 ${expand ? "" : "top-2"}`}
+        />
       )}
     </li>
-  )
+  );
 }
