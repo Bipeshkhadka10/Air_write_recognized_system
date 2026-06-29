@@ -80,15 +80,11 @@ export default function Notes() {
             <span className='text-2xl font-medium'>Notes</span>
             <h4 className='text-gray-700 text-sm w-full'>Manage your air-written notes</h4>
         </div>
-        {/* search */}
-        <div className='flex justify-between items-center'>
-            <div className='relative flex  items-center'>
-            <FiSearch className='absolute left-1' size={16} />
-            <input type="text" placeholder='search...' className='text-sm border h-8 pl-8 w-23 rounded-md md:w-auto'/>
-        </div>
-        <User onClick={()=>{navigate('/dashboard/settings')}} size={20} className='text-gray-800 ml-4 cursor-pointer' />
         
+       <div className='flex items-center gap-3'>
+          <User onClick={() => navigate('/dashboard/settings')} size={20} className='cursor-pointer text-gray-700' />
         </div>
+        
       </nav>
     
 

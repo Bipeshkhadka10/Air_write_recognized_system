@@ -1,20 +1,74 @@
-import React from "react";
-import { FiSearch } from "react-icons/fi";
-import { User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  BarChart,
-  Bar,
-  Cell,
-} from "recharts";
+/**
+ * modelStatus.jsx — Real-data ML Status Dashboard
+ * Pulls live data from:
+ *   GET /predict/health  → model name, num_classes, online/offline
+ *   GET /predict/stats   → aggregated Log collection data
+ * Auto-refreshes every 30 seconds.
+ */
 
+import { useEffect, useState, useCallback } from 'react'
+import { FiSearch, FiRefreshCw, FiZap, FiCpu, FiActivity, FiShield } from 'react-icons/fi'
+import { User } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import {
+  ResponsiveContainer, LineChart, Line, XAxis, YAxis,
+  CartesianGrid, Tooltip, BarChart, Bar, Cell,
+} from 'recharts'
+import api from '../api/axios.js'
+
+// ── helpers ──────────────────────────────────────────────────────────────────
+const fmt = (n) => (n == null ? '—' : `${n}%`)
+
+const confColor = (v) => {
+  if (v == null) return '#94a3b8'
+  if (v >= 80)   return '#34d399'   // green
+  if (v >= 65)   return '#60a5fa'   // blue
+  if (v >= 50)   return '#fbbf24'   // amber
+  return '#f87171'                   // red
+}
+
+function timeAgo(iso) {
+  const diff = Date.now() - new Date(iso).getTime()
+  const s = Math.floor(diff / 1000)
+  if (s < 60)  return `${s}s ago`
+  if (s < 3600) return `${Math.floor(s / 60)}m ago`
+  return `${Math.floor(s / 3600)}h ago`
+}
+
+// ── sub-components ───────────────────────────────────────────────────────────
+function StatCard({ icon: Icon, label, value, sub, accent, loading }) {
+  return (
+    <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-5 flex items-start gap-4">
+      <div className={`mt-0.5 h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${accent}`}>
+        <Icon size={18} />
+      </div>
+      <div className="min-w-0">
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">{label}</p>
+        {loading
+          ? <div className="h-7 w-20 bg-slate-100 rounded animate-pulse" />
+          : <p className="text-2xl font-bold text-slate-900 leading-none">{value}</p>
+        }
+        {sub && <p className="text-xs text-slate-400 mt-1">{sub}</p>}
+      </div>
+    </div>
+  )
+}
+
+function CustomTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null
+  return (
+    <div className="bg-white border border-slate-200 rounded-xl shadow-lg px-3 py-2 text-sm">
+      <p className="font-semibold text-slate-700">{label}</p>
+      {payload.map((p) => (
+        <p key={p.dataKey} style={{ color: p.color }}>
+          {p.name}: {p.value != null ? `${p.value}%` : 'no data'}
+        </p>
+      ))}
+    </div>
+  )
+}
+
+// ── main component ────────────────────────────────────────────────────────────
 export default function ModelStatus() {
   const navigate = useNavigate();
   const metrics = [
@@ -140,6 +194,13 @@ export default function ModelStatus() {
             </div>
           ))}
         </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={fetchData}
+            title="Refresh"
+            className="h-8 w-8 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+            <FiRefreshCw size={14} className={loading ? 'animate-spin text-indigo-500' : 'text-slate-500'} />
+          </button>
 
         {/* CHARTS ROW */}
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -169,6 +230,7 @@ export default function ModelStatus() {
               </ResponsiveContainer>
             </div>
           </div>
+        )}
 
           {/* Character Recognition */}
           <div className="rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm">
@@ -201,10 +263,6 @@ export default function ModelStatus() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
 
 /* ---------------- Icons ---------------- */
 function WaveIcon(props) {

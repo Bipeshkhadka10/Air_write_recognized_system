@@ -1,10 +1,8 @@
-import React from 'react'
-import { FiSearch,FiZap } from 'react-icons/fi'
-import { User,FileText,Activity,PenTool } from 'lucide-react'
-import { Outlet ,useNavigate } from 'react-router-dom'
-import {useAuth} from "../api/authContex"
-import { useState } from 'react'
-import { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { FiSearch, FiZap } from 'react-icons/fi'
+import { User, FileText, Activity, PenTool } from 'lucide-react'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { useAuth } from "../api/authContex"
 import api from '../api/axios.js'
 
 export default function Dashboard({expand}) {
@@ -55,6 +53,8 @@ export default function Dashboard({expand}) {
                 </div>
             </div>
         </div>
+                </div>
+            </nav>
 
         <div className='flex items-center p-1.5'>
             <div className='relative h-20 w-50 rounded-md flex justify-around items-center shadow-md bg-white dark:bg-gray-800 border dark:border-gray-700'>
