@@ -1,25 +1,25 @@
-/* *{
-    margin: 0;
-    padding: 0;
-} */
 /* LIGHT THEME (default) */
-body.light {
+:root {
   --bg-color: #ffffff;
   --text-color: #1a1a1a;
   --card-bg: #ffffff;
   --border-color: #e5e7eb;
   --primary-color: #4a6cf7;
   --secondary-text: #6b7280;
+  --sidebar-bg: #ffffff;
+  --input-bg: #ffffff;
 }
 
 /* DARK THEME */
-body.dark {
+html.dark {
   --bg-color: #0f172a;
   --text-color: #f1f5f9;
   --card-bg: #1e293b;
   --border-color: #334155;
   --primary-color: #4a6cf7;
   --secondary-text: #94a3b8;
+  --sidebar-bg: #1e293b;
+  --input-bg: #1e293b;
 }
 
 /* APPLY GLOBAL */
@@ -27,4 +27,103 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: all 0.3s ease;
-}   
+}
+
+/* Sidebar */
+aside nav {
+  background-color: var(--sidebar-bg) !important;
+  color: var(--text-color) !important;
+}
+
+/* Sidebar nav item text */
+aside li span {
+  color: var(--text-color) !important;
+}
+
+/* Cards */
+.rounded-3xl {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+}
+
+/* Main content area */
+.bg-gray-50 {
+  background-color: var(--bg-color) !important;
+}
+
+.bg-gray-800 {
+  background-color: var(--card-bg) !important;
+}
+
+/* Full page background */
+.min-h-screen {
+  background-color: var(--bg-color) !important;
+}
+
+.space-y-6 {
+  background-color: var(--bg-color) !important;
+}
+
+.grid {
+  background-color: transparent !important;
+}
+
+/* Text */
+.text-gray-900 {
+  color: var(--text-color) !important;
+}
+
+/* Only faded text on paragraphs, not nav items */
+p.text-gray-500,
+h4.text-gray-500,
+span.text-gray-500,
+p.text-gray-600,
+span.text-gray-600 {
+  color: var(--secondary-text) !important;
+}
+
+/* Borders */
+.border, .border-t, .border-b {
+  border-color: var(--border-color) !important;
+}
+
+/* Input fields */
+input {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+}
+
+/* Top navbar */
+nav {
+  background-color: var(--sidebar-bg) !important;
+  color: var(--text-color) !important;
+}
+
+/* Tabs bar */
+.rounded-md {
+  background-color: var(--card-bg) !important;
+}
+
+/* Toggle off state (gray/dark when off) */
+.bg-gray-200 {
+  background-color: #d1d5db !important;
+}
+
+html.dark .bg-gray-200 {
+  background-color: #4b5563 !important;
+}
+/* Main page background */
+.flex-1 {
+  background-color: var(--bg-color) !important;
+}
+
+/* All white cards */
+.bg-white {
+  background-color: var(--card-bg) !important;
+}
+/* Icon containers in cards */
+.bg-white.rounded-full,
+.bg-white.rounded-xl,
+.bg-white.rounded-2xl {
+  background-color: var(--card-bg) !important;
+}
