@@ -2,7 +2,7 @@ const axios = require('axios');
 const Log = require('../model/logSchema');
 require('dotenv').config();
 
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL;
+const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:6000';
 
 // controller to predict a single character from a stroke image
 // expects: { image: "data:image/png;base64,..." }  in req.body
@@ -44,7 +44,7 @@ exports.predictCharacter = async (req, res) => {
         // ML service down or unreachable
         if (error.code === 'ECONNREFUSED' || error.code === 'ECONNABORTED') {
             return res.status(503).json({
-                message: "ML service unavailable. Maybe ml_service.py running?",
+                message: "ML service unavailable. Is ml_service.py running?",
                 error: error.message
             });
         }

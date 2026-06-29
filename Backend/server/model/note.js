@@ -14,10 +14,6 @@ const noteSchema = new mongoose.Schema({
         type:String,
 
     },
-    strokeImagePath:{
-        type:String,
-    },
-   
     createdAt:{
         type:Date,
         default:Date.now,

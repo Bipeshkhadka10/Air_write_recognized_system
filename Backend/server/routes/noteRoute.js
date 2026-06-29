@@ -9,7 +9,7 @@ router.get('/notes',authValidation,getAllNotes.bind(this));
 // Route to get recent Notes
 router.get('/recent',authValidation,getRecentNotes.bind(this));
 // Route to create a new Note
-router.post('/note',createNote.bind(this));
+router.post('/note',authValidation,createNote.bind(this));
 //Route to update Note details
 router.put('/note/:id',authValidation,updateNote.bind(this));
 //Router to delete a Note
