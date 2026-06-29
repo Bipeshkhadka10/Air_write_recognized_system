@@ -25,11 +25,11 @@ export default function Slidebar({ children }) {
     window.location.href = "/signin";
   };
   return (
-    <div className="flex h-full w-full">
+    <div className="flex h-full w-full bg-gray-50 dark:bg-gray-900">
       <aside
-        className={`h-screen transition-all duration-300 ${expand ? "w-64" : "w-16"}`}
+        className={`h-screen transition-all duration-300 ${expand ? "w-64" : "w-16"} bg-white dark:bg-gray-800`}
       >
-        <nav className="h-full flex flex-col bg-white shadow-md">
+        <nav className="h-full flex flex-col bg-white dark:bg-gray-800 shadow-md">
           {/* Header */}
           <div className="p-4 flex justify-between items-center border-b h-16 overflow-hidden">
             <img
@@ -40,7 +40,8 @@ export default function Slidebar({ children }) {
             />
             <button
               onClick={() => setExpand(!expand)}
-              className="w-9 h-9 flex justify-center items-center rounded-md bg-gray-200 hover:bg-indigo-500 hover:text-white transition"
+                   className="w-9 h-9 flex justify-center items-center rounded-md bg-gray-200 dark:bg-gray-700 hover:bg-indigo-500 hover:text-white transition"
+
             >
               {expand ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
             </button>
@@ -75,8 +76,8 @@ export default function Slidebar({ children }) {
               )}
               {expand && (
                 <div className="leading-4">
-                  <h4 className="font-semibold">{user?.name || "Joy Boss"}</h4>
-                  <span className="text-xs text-gray-600">
+                  <h4 className="font-semibold dark:text-white">{user?.name || "Joy Boss"}</h4>
+                  <span className="text-xs text-gray-600 dark:text-gray-400">
                     {user?.email || "No email available"}
                   </span>
                 </div>
@@ -97,7 +98,7 @@ export default function Slidebar({ children }) {
       </aside>
 
       {/* Page Content */}
-      <div className="flex-1 h-screen overflow-auto bg-gray-50">
+      <div className="flex-1 h-screen overflow-auto bg-gray-50 dark:bg-gray-900">
         <Outlet />
       </div>
     </div>
@@ -126,7 +127,7 @@ export function SlidebarItems({ icon, text, active, clicked }) {
     <li
       onClick={handleClick}
       className={`h-11 relative flex items-center px-4 rounded-md transition-all duration-300 cursor-pointer group
-      ${active ? "bg-gradient-to-tr from-indigo-200 to-indigo-600 text-indigo-950" : "hover:bg-sky-200"}`}
+      ${active ? "bg-gradient-to-tr from-indigo-200 to-indigo-600 text-indigo-950" : "hover:bg-sky-200 dark:hover:bg-gray-700 dark:text-gray-200"}`}
     >
       <div
         className={`flex items-center gap-3 w-full transition-all duration-300 ${expand ? "" : "justify-center"}`}
